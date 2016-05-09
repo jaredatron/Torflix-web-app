@@ -16,7 +16,19 @@ export default class App extends React.Component {
     };
   }
 
+  static childContextTypes = {
+    setPathAndProps: React.PropTypes.func.isRequired
+  }
 
+  getChildContext() {
+    return {
+      setPathAndProps: this.setPathAndProps.bind(this)
+    };
+  }
+
+  setPathAndProps(path, props) {
+    console.info('setPathAndProps', path, props);
+  }
 
   render() {
     return <this.state.Page props={this.state} />

@@ -31,13 +31,19 @@ body > main
   height: 100%
   width: 100%
 
-.columns
+.columns, .rows
   display: flex
-  flex-direction: row
   flex-wrap: nowrap
   justify-content: flex-start
   align-items: stretch
   align-content: flex-start
+
+.columns
+  flex-direction: row
+
+.rows
+  flex-direction: column
+
 
 .grow
   flex-grow: 1
@@ -48,3 +54,8 @@ body > main
 .theme-dark
   background-color: black
   color: white
+
+  .Button
+    background: transparent
+    border: none
+    color: inherit
