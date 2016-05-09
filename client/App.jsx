@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+require('css!normalize.css')
 require('./style/main.sass')
 
 export default class App extends React.Component {
