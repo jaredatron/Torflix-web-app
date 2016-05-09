@@ -1,10 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+require('./style/main.sass')
+
 export default class App extends React.Component {
 
   render() {
-    return <div>wooot</div>;
+    return <div>assaads</div>;
   }
 
 }
