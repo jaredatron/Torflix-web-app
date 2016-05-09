@@ -1,15 +1,31 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import router from './router';
 
-require('css!normalize.css')
 require('./style/main.sass')
 
 export default class App extends React.Component {
 
-  render() {
-    return <div>assaads</div>;
+  constructor(props) {
+    super(props);
+    let route = router(location);
+    this.state = {
+      path: route.path,
+      params: route.params,
+      Page: route.Page,
+    };
   }
 
+
+
+  render() {
+    return <this.state.Page props={this.state} />
+  }
+
+}
+
+App.render = (DOMNode) => {
+  ReactDOM.render(React.createElement(App,null), DOMNode);
 }
 //   static propTypes = {
 //     color: React.PropTypes.string,
