@@ -12,30 +12,21 @@ export default class App extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = this.getRouteState()
-    this.onPopState = this.onPopState.bind(this);
+    this.state = router.getRoute();
+    this.setRouteState = this.setRouteState.bind(this);
   }
 
   componentDidMount() {
-    addEventListener('popstate', this.onPopState)
+    router.onChange(this.setRouteState);
+    router.start();
   }
 
   componentWillUnmount() {
-    removeEventListener('popstate', this.onPopState)
+    router.stop();
   }
 
-  getRouteState(){
-    let route = router(location);
-    return {
-      path: route.path,
-      params: route.params,
-      Page: route.Page,
-    };
-  }
-
-  onPopState(){
-    console.info('POPSTATE', event);
-    this.setState(this.getRouteState());
+  setRouteState(){
+    this.setState(router.getRoute());
   }
 
   getChildContext() {
@@ -44,13 +35,14 @@ export default class App extends React.Component {
     };
   }
 
-  setPathAndProps(path, props) {
-    history.pushState({}, document.title, path);
-    this.onPopState();
+  setPathAndProps(path, props, replace) {
+    router.setRoute(path, props, replace);
+    // history.pushState({}, document.title, path);
+    // this.onPopState();
   }
 
   render() {
-    return <this.state.Page props={this.state} />
+    return <this.state.Page {...this.state} />
   }
 
 }
