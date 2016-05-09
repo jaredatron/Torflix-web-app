@@ -1,19 +1,38 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-export default class PageLink extends React.Component {
+export default class Link extends React.Component {
+
+  static PropTypes = {
+    href: React.PropTypes.string,
+    path: React.PropTypes.string,
+    props: React.PropTypes.object,
+  }
 
   static contextTypes = {
     setPathAndProps: React.PropTypes.func.isRequired
   }
 
+  constructor(props) {
+    super(props);
+    this.onClick = this.onClick.bind(this);
+  }
+
   onClick(event) {
-    event.preventDefault();
+    // TODO return if any modifier keys are pressed
     if (this.props.onClick){
+      event.preventDefault();
       this.props.onClick(event);
-    }else{
-      console.info('SHOULD PUSH STATE TO', this.props.href);
-      this.context.setPathAndProps('boosh', {page: 2});
+      return false;
+    }
+
+    if (this.props.path){
+      event.preventDefault();
+      this.context.setPathAndProps(
+        this.props.path,
+        this.props.params,
+      );
+      return false;
     }
   }
 
@@ -23,10 +42,10 @@ export default class PageLink extends React.Component {
     // let className = "PageLink "+(this.props.className || "")
 
     let props = {}
-    props.href = this.props.href || "";
+    props.href = this.props.href || this.props.path || "";
     props.className = this.props.className || "";
     props.className = "PageLink "+this.props.className;
-    props.onClick = this.onClick.bind(this);
+    props.onClick = this.onClick;
 
     // return <a href={href} className={className} onClick={this.onClick}>
     return <a {...props}>
