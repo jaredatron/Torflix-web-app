@@ -7,7 +7,7 @@ require('./style/main.sass')
 export default class App extends React.Component {
 
   static childContextTypes = {
-    setPathAndProps: React.PropTypes.func.isRequired
+    setLocation: React.PropTypes.func.isRequired
   }
 
   constructor(props) {
@@ -17,11 +17,12 @@ export default class App extends React.Component {
   }
 
   componentDidMount() {
-    router.onChange(this.setRouteState);
+    router.onChange = this.setRouteState;
     router.start();
   }
 
   componentWillUnmount() {
+    delete router.onChange;
     router.stop();
   }
 
@@ -31,18 +32,18 @@ export default class App extends React.Component {
 
   getChildContext() {
     return {
-      setPathAndProps: this.setPathAndProps.bind(this)
+      setLocation: this.setLocation.bind(this)
     };
   }
 
-  setPathAndProps(path, props, replace) {
-    router.setRoute(path, props, replace);
+  setLocation(path, props, replace) {
+    router.setLocation(path, props, replace);
     // history.pushState({}, document.title, path);
     // this.onPopState();
   }
 
   render() {
-    return <this.state.Page {...this.state} />
+    return <this.state.page {...this.state} />
   }
 
 }

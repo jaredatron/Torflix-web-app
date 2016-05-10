@@ -1,29 +1,17 @@
-import Router from '../lib/Router'
+import Router        from '../lib/Router'
 import NotFoundPage  from './pages/NotFoundPage.jsx'
 import HomePage      from './pages/HomePage.jsx'
 import TransfersPage from './pages/TransfersPage.jsx'
 
+const redirectTo = (path, params) => {
+  params = params || {};
+  return () => {
+    RedirectComponent({path: path, params: params});
+  };
+};
 
-export default new Router(() => {
-  this.match('/',          HomePage);
-  this.match('/transfers', TransfersPage);
-  this.match('/*',         NotFoundPage);
-})
-
-// export default (location) => {
-//   let path = location.pathname;
-//   console.log('ROUTER', path);
-//   // let params = location.search; // TODO
-
-//   let Page = (
-//     (path === '/')          ? HomePage :
-//     (path === '/transfers') ? TransfersPage :
-//     NotFoundPage
-//   );
-
-//   return {
-//     path: location.pathname,
-//     params: {},
-//     Page: Page,
-//   }
-// }
+export default new Router( router => {
+  router.match('/',          HomePage);
+  router.match('/transfers', TransfersPage);
+  router.match('/*',         NotFoundPage);
+});

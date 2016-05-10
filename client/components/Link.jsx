@@ -10,7 +10,7 @@ export default class Link extends React.Component {
   }
 
   static contextTypes = {
-    setPathAndProps: React.PropTypes.func.isRequired
+    setLocation: React.PropTypes.func.isRequired
   }
 
   constructor(props) {
@@ -28,7 +28,7 @@ export default class Link extends React.Component {
 
     if (this.props.path){
       event.preventDefault();
-      this.context.setPathAndProps(
+      this.context.setLocation(
         this.props.path,
         this.props.params,
       );
