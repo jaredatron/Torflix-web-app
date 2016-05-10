@@ -2,8 +2,14 @@ var path = require('path');
 var webpack = require('webpack');
 
 module.exports = {
-  entry: './client.js',
-  output: { path: __dirname+'/public', filename: 'client.js' },
+  entry: {
+    app: ['./client.js',]
+  },
+  output: {
+    publicPath: '/',
+    path: path.resolve(__dirname, 'public'),
+    filename: 'client.js'
+  },
   devtool: "source-map",
   module: {
     loaders: [
