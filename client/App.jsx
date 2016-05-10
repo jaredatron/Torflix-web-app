@@ -12,22 +12,30 @@ export default class App extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = router.getRoute();
-    this.setRouteState = this.setRouteState.bind(this);
+    console.log(router);
+    this.state = {
+      path:   router.path,
+      params: router.params,
+      page:   router.page,
+    };
   }
 
   componentDidMount() {
-    router.onChange = this.setRouteState;
-    router.start();
+    // router.onChange = this.setRouteState;
+    // router.start();
+    router.stream.subscribe(
+      route => {
+        console.log('route change', route);
+        this.setState(route);
+      },
+      error => {
+        console.error('routing error', error);
+      }
+    );
   }
 
   componentWillUnmount() {
-    delete router.onChange;
-    router.stop();
-  }
 
-  setRouteState(){
-    this.setState(router.getRoute());
   }
 
   getChildContext() {
@@ -38,8 +46,6 @@ export default class App extends React.Component {
 
   setLocation(path, props, replace) {
     router.setLocation(path, props, replace);
-    // history.pushState({}, document.title, path);
-    // this.onPopState();
   }
 
   render() {

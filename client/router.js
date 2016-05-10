@@ -13,5 +13,5 @@ const redirectTo = (path, params) => {
 export default new Router( router => {
   router.match('/',          HomePage);
   router.match('/transfers', TransfersPage);
-  router.match('/*',         NotFoundPage);
+  router.match('/*path',     NotFoundPage);
 });
