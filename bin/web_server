@@ -1,0 +1,10 @@
+#!/usr/bin/env node
+
+webServer = require('../lib/web_server')
+webServer.start((app)=>{
+  if (app.get('port') == 3000) {
+    console.log('Node app is running at http://torflix.dev');
+  }else{
+    console.log('Node app is running at http://localhost:'+app.get('port'));
+  }
+});
