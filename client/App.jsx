@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import router from './router';
+import state from './state';
+import { setLocation } from '../lib/Location'
 
 require('./style/main.sass')
 
@@ -12,30 +13,14 @@ export default class App extends React.Component {
 
   constructor(props) {
     super(props);
-    console.log(router);
-    this.state = {
-      path:   router.path,
-      params: router.params,
-      page:   router.page,
-    };
-  }
-
-  componentDidMount() {
-    // router.onChange = this.setRouteState;
-    // router.start();
-    router.stream.subscribe(
-      route => {
-        console.log('route change', route);
-        this.setState(route);
-      },
-      error => {
-        console.error('routing error', error);
+    state.subscribe( state => {
+      console.log('STATE UPDATE', this.state, state)
+      if (this.state){
+        this.setState(state);
+      }else{
+        this.state = state;
       }
-    );
-  }
-
-  componentWillUnmount() {
-
+    })
   }
 
   getChildContext() {
@@ -45,7 +30,7 @@ export default class App extends React.Component {
   }
 
   setLocation(path, props, replace) {
-    router.setLocation(path, props, replace);
+    setLocation(path, props, replace);
   }
 
   render() {
