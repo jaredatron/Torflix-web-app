@@ -20,7 +20,12 @@ export default class App extends React.Component {
       }else{
         this.state = state;
       }
-    })
+    },
+
+    error => { console.log('STATE ERROR', error); },
+    () => { console.log('STATE COMPLETE'); },
+
+    )
   }
 
   getChildContext() {
@@ -39,6 +44,6 @@ export default class App extends React.Component {
 
 }
 
-App.render = (DOMNode) => {
-  ReactDOM.render(React.createElement(App,null), DOMNode);
+App.render = function(DOMNode){
+  this.instance = ReactDOM.render(React.createElement(App,null), DOMNode);
 }
