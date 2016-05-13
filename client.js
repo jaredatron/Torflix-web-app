@@ -1,2 +1,3 @@
-import App from './client/App.jsx';
-App.render(document.querySelector('main'));
+import App from './client/app.jsx';
+
+App.render();
