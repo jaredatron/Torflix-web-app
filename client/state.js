@@ -2,6 +2,11 @@ import { timeStream } from './resources/time'
 import { routeStream } from './resources/route'
 import { transfersStream } from './resources/transfers';
 
+
+// https://github.com/Reactive-Extensions/RxJS/blob/master/doc/api/core/operators/forkjoin.md
+// Runs all observable sequences in parallel and collect their last elements.
+
+
 let appStateStream = Rx.Observable.combineLatest(
   routeStream,
   transfersStream,
