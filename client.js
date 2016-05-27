@@ -1,3 +1,3 @@
-import App from './client/app.jsx';
+import App from './client/app';
 
 App.render(document.querySelector('body > main'));

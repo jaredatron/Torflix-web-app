@@ -10,6 +10,15 @@ Starting the app
 
 ## Architecture
 
+
+#### app.state
+
+`app.state` is a hot stream
+
+`app.events` is a cold stream
+
+
+
 - state is derived entirely from streams
 - all actions are emitted over a single events stream
 - resources:
