@@ -14,7 +14,10 @@ export default function(events){
   })
 
   const loadTransfers = () => {
-    state.loaded = true;
+    putio.transfers().subscribe( transfers => {
+      state.transfers = transfers;
+      state.loaded = true;
+    })
     update()
   }
 

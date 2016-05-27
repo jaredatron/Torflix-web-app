@@ -20,7 +20,6 @@ export default class TransfersPage extends React.Component {
 
     return <Layout auth={this.props.auth}>
       <h1>Transfers</h1>
-      <small>{JSON.stringify(this.props)}</small>
       {transfers}
     </Layout>
   }
@@ -30,17 +29,30 @@ export default class TransfersPage extends React.Component {
 
 class TransfersList extends React.Component {
   render(){
+    console.log('transfers', this.props.transfers.transfers);
+    const transfers = this.props.transfers.transfers.map((transfer) => {
+      return <TransferListItem key={transfer.id} transfer={transfer} />
+    })
+
     return <table className="TransfersList">
       <thead>
         <tr>
+          <th>Status</th>
           <th>Name</th>
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td>Adobé Photoshop</td>
-        </tr>
+        {transfers}
       </tbody>
     </table>
+  }
+}
+
+class TransferListItem extends React.Component {
+  render(){
+    return <tr>
+      <td>{this.props.transfer.status}</td>
+      <td>{this.props.transfer.name}</td>
+    </tr>
   }
 }
