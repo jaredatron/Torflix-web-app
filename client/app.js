@@ -29,7 +29,6 @@ App.state = new State(App.events, {
   transfers: transfers,
 })
 
-
 Rx.Observable.fromEvent(window, 'keydown').subscribe(App.emit)
 
 export default App
