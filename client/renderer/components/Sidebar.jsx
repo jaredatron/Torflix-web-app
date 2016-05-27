@@ -4,15 +4,30 @@ import Link from './Link.jsx';
 
 export default class Sidebar extends React.Component {
 
+  static contextTypes = {
+    state: React.PropTypes.object.isRequired
+  }
+
+  constructor(){
+    super()
+    this.logState = this.logState.bind(this)
+  }
+
+  logState(){
+    console.info('STATE:', this.context.state)
+  }
+
   render() {
+    const auth = this.context.state.auth
     return <div className="theme-dark rows">
       <Link path="/"         >Torflix</Link>
       <Link path="/search"   >Search</Link>
       <Link path="/transfers">Transfers</Link>
       <Link path="/files"    >Files</Link>
       <LogoutLink>Logout</LogoutLink>
-      <img src={this.props.auth.avatar_url} />
-      <div>{this.props.auth.username}</div>
+      <img src={auth.avatar_url} />
+      <div>{auth.username}</div>
+      <Link onClick={this.logState}>Log State</Link>
     </div>
   }
 

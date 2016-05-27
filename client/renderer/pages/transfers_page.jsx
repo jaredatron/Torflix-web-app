@@ -18,7 +18,7 @@ export default class TransfersPage extends React.Component {
       <TransfersList transfers={this.props.transfers} /> :
       'Loading...'
 
-    return <Layout auth={this.props.auth}>
+    return <Layout>
       <h1>Transfers</h1>
       {transfers}
     </Layout>
@@ -29,7 +29,6 @@ export default class TransfersPage extends React.Component {
 
 class TransfersList extends React.Component {
   render(){
-    console.log('transfers', this.props.transfers.transfers);
     const transfers = this.props.transfers.transfers.map((transfer) => {
       return <TransferListItem key={transfer.id} transfer={transfer} />
     })

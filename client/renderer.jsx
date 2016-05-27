@@ -37,6 +37,7 @@ class App extends React.Component {
 
   static childContextTypes = {
     emit:   React.PropTypes.func.isRequired,
+    state:  React.PropTypes.object.isRequired,
     path:   React.PropTypes.string.isRequired,
     params: React.PropTypes.object.isRequired,
   }
@@ -44,6 +45,7 @@ class App extends React.Component {
   getChildContext() {
     return {
       emit:   this.props.emit,
+      state:  this.props.state,
       path:   this.props.state.route.path,
       params: this.props.state.route.params,
     };

@@ -15,6 +15,7 @@ export default function(events){
 
   const loadTransfers = () => {
     putio.transfers().subscribe( transfers => {
+      console.log('transfers', transfers);
       state.transfers = transfers;
       state.loaded = true;
     })
