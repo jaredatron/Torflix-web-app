@@ -17,8 +17,6 @@ const App = {
   },
 }
 
-
-
 App.state = new State(App.events, {
   now: now,
   route: route,
@@ -27,6 +25,12 @@ App.state = new State(App.events, {
 App.state.subscribe(
   state => {
     console.log("STATE:", state)
+  }
+)
+
+App.events.subscribe(
+  event => {
+    console.log('EVENT', event)
   }
 )
 

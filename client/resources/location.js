@@ -3,6 +3,17 @@ import Rx from 'rx'
 export default function location(events){
   let setLocationStream = new Rx.ReplaySubject(1);
   setLocationStream.onNext();
+
+  let setLocation = (path, params, replace) => {
+    var href = hrefFor(path, params);
+    if (replace){
+      history.replaceState(null, null, href);
+    }else{
+      history.pushState(null, null, href);
+    }
+    setLocationStream.onNext();
+  }
+
   let popstateStream = Rx.Observable.fromEvent(window, 'popstate');
 
   let state = Rx.Observable.merge(
@@ -15,27 +26,25 @@ export default function location(events){
     }
   });
 
+  events.subscribe(
+    event => {
+      if (event.type === 'changeLocation'){
+        setLocation(event.path, event.params, event.replace)
+      }
+    }
+  )
+
   return state;
 }
 
 
-export function setLocation(path, params, replace){
-  var href = hrefFor(path, params);
-  if (replace){
-    history.replaceState(null, null, href);
-  }else{
-    history.pushState(null, null, href);
-  }
-  setLocationStream.onNext();
-}
 
-
-export function locationToString(path, params){
+const locationToString = (path, params) => {
   return ensureSlashPrefix(path)+objectToSearch(params);
 }
 
 
-export function hrefFor(path, params){
+const hrefFor = (path, params) => {
   return locationToString(path || '/', params || {});
 }
 
