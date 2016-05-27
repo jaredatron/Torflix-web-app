@@ -1,5 +1,13 @@
 var path = require('path');
 var webpack = require('webpack');
+var ENV = require('./config/environment')
+
+var constants = new webpack.DefinePlugin({
+  PUTIO_APPLICATION_SECRET: JSON.stringify(ENV.PUTIO_APPLICATION_SECRET),
+  PUTIO_CLIENT_ID:          JSON.stringify(ENV.PUTIO_CLIENT_ID),
+  PUTIO_OAUTH_TOKEN:        JSON.stringify(ENV.PUTIO_OAUTH_TOKEN),
+  PUTIO_REDIRECT_URI:       JSON.stringify(ENV.PUTIO_REDIRECT_URI),
+})
 
 module.exports = {
   entry: {
@@ -11,12 +19,15 @@ module.exports = {
     filename: 'client.js'
   },
   devtool: "source-map",
+  plugins: [
+    constants
+  ],
   module: {
     loaders: [
       {
         test: /.jsx?$/,
         loader: 'babel-loader',
-        exclude: /node_modules/,
+        exclude: /node_modules|put\.io/,
         query: {
           // presets: ['es2015', 'react']
           presets: ['es2015', 'react', 'stage-0']

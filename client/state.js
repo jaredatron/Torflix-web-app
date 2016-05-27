@@ -5,7 +5,6 @@ import Rx from 'rx'
 
 
 const State = (events, spec) => {
-  console.log('State Constructor', events, spec);
   for (var prop in spec){
     spec[prop] = spec[prop](events)
   }

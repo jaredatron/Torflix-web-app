@@ -1,6 +1,7 @@
 import React from 'react';
 import Layout from '../components/Layout.jsx';
 import Link from '../components/Link.jsx';
+import putio from '../../putio'
 
 export default class TransfersPage extends React.Component {
 
@@ -18,7 +19,7 @@ export default class TransfersPage extends React.Component {
 
 class LoginButton extends React.Component {
   render(){
-    const href = 'http://google.com'
+    const href = putio.oauthUrl()
     return <Link href={href}>{this.props.children}</Link>
   }
 }

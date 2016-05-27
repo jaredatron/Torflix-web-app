@@ -21,11 +21,13 @@ const App = {
 
 import now       from './resources/now'
 import route     from './resources/route'
+import auth from './resources/auth'
 import transfers from './resources/transfers'
 
 App.state = new State(App.events, {
   now: now,
   route: route,
+  auth: auth,
   transfers: transfers,
 })
 
@@ -36,6 +38,9 @@ export default App
 // debugging
 
 window.App = App;
+
+import putio from './putio'
+App.putio = putio
 
 App.state.subscribe(
   state => {
