@@ -6,7 +6,7 @@ export default class Layout extends React.Component {
 
   render() {
     return <div className="layer columns">
-      <Sidebar />
+      <Sidebar auth={this.props.auth}/>
       <div className="grow">
         {this.props.children}
       </div>

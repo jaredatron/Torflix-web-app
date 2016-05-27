@@ -1,4 +1,4 @@
-import Rx from 'rx'
+import Rx from 'rx-dom'
 import putio from '../putio'
 
 export default function(events){

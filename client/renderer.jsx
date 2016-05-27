@@ -1,4 +1,4 @@
-import RxDOM from 'rx-dom'
+import Rx from 'rx-dom'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import LoginPage from './renderer/pages/login_page.jsx'

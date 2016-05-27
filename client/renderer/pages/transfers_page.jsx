@@ -18,7 +18,7 @@ export default class TransfersPage extends React.Component {
       <TransfersList transfers={this.props.transfers} /> :
       'Loading...'
 
-    return <Layout>
+    return <Layout auth={this.props.auth}>
       <h1>Transfers</h1>
       <small>{JSON.stringify(this.props)}</small>
       {transfers}

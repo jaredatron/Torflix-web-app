@@ -1,4 +1,4 @@
-import Rx from 'rx'
+import Rx from 'rx-dom'
 import putio from '../putio'
 
 export default function(events){
@@ -18,7 +18,7 @@ export default function(events){
       stateStream.onNext({})
       putio.accountInfo().subscribe(
         creds => { stateStream.onNext(creds) },
-        error => { stateStream.onNext({error:true}) }
+        error => { console.error(error); stateStream.onNext({error:error}) }
       )
 
     }else{

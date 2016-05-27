@@ -1,4 +1,4 @@
-import Rx from 'rx'
+import Rx from 'rx-dom'
 
 export default function location(events){
   let setLocationStream = new Rx.ReplaySubject(1);

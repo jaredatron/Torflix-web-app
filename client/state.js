@@ -1,4 +1,4 @@
-import Rx from 'rx'
+import Rx from 'rx-dom'
 // import now from './resources/now'
 // import { routeStream } from './resources/route'
 // // import { transfersStream } from './resources/transfers'

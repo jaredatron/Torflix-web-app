@@ -11,6 +11,8 @@ export default class Sidebar extends React.Component {
       <Link path="/transfers">Transfers</Link>
       <Link path="/files"    >Files</Link>
       <LogoutLink>Logout</LogoutLink>
+      <img src={this.props.auth.avatar_url} />
+      <div>{this.props.auth.username}</div>
     </div>
   }
 

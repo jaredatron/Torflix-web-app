@@ -27,7 +27,7 @@ module.exports = {
       {
         test: /.jsx?$/,
         loader: 'babel-loader',
-        exclude: /node_modules|put\.io/,
+        exclude: /node_modules|put\.io|RxJS-DOM/,
         query: {
           // presets: ['es2015', 'react']
           presets: ['es2015', 'react', 'stage-0']

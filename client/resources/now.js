@@ -1,4 +1,4 @@
-import Rx from 'rx'
+import Rx from 'rx-dom'
 
 export default function now(events){
   const state = Rx.Observable.interval(100)
