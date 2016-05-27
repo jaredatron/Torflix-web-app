@@ -48,7 +48,7 @@ class App extends React.Component {
   }
 
   render() {
-    console.log('RENDER', this.props);
+    // console.log('RENDER', this.props);
     const state = this.props.state
     if (state){
       return <state.route.page {...state} />

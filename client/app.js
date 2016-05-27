@@ -24,7 +24,7 @@ App.state = new State(App.events, {
 
 App.state.subscribe(
   state => {
-    console.log("STATE:", state)
+    // console.log("STATE:", state)
   }
 )
 

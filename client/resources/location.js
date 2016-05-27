@@ -19,7 +19,6 @@ export default function location(events){
   let state = Rx.Observable.merge(
     setLocationStream, popstateStream
   ).map(()=>{
-    console.log('locationStream fired')
     return {
       path:   window.location.pathname,
       params: searchToObject(window.location.search),
