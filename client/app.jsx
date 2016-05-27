@@ -8,18 +8,19 @@ const App = {
   state: state,
 
   render(DOMNode){
-    this.stateSubscription = stateStream.subscribe(
-      state => {
-        renderer.render(DOMNode, state);
-      },
-      error => {
-        console.warn('App Render Error');
-        console.error(error);
-      },
-      () => {
-        throw new Error('state stream should never complete');
-      },
-    );
+    renderer.render(DOMNode, state);
+    // this.stateSubscription = state.subscribe(
+    //   state => {
+    //     renderer.render(DOMNode, state);
+    //   },
+    //   error => {
+    //     console.warn('App Render Error');
+    //     console.error(error);
+    //   },
+    //   () => {
+    //     throw new Error('state stream should never complete');
+    //   },
+    // );
   },
 }
 

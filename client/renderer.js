@@ -1,13 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { locationStream, setLocation } from './renderer/location'
+// import { locationStream, setLocation } from './renderer/location'
 
 require('./renderer/style/main.sass')
 
 let Renderer = {
-  render(DOMNode, stateStream) {
+  render(DOMNode, state) {
     // TODO merge streams locationStream
-    this.stateSubscription = stateStream.subscribe(
+    this.stateSubscription = state.subscribe(
       state => {
         this.instance = ReactDOM.render(React.createElement(App, state), DOMNode);
       },
@@ -26,19 +26,19 @@ export default Renderer
 
 class App extends React.Component {
 
-  static childContextTypes = {
-    setLocation: React.PropTypes.func.isRequired
-  }
+  // static childContextTypes = {
+  //   setLocation: React.PropTypes.func.isRequired
+  // }
 
-  getChildContext() {
-    return {
-      setLocation: this.setLocation.bind(this)
-    };
-  }
+  // getChildContext() {
+  //   return {
+  //     setLocation: this.setLocation.bind(this)
+  //   };
+  // }
 
-  setLocation(path, props, replace) {
-    setLocation(path, props, replace);
-  }
+  // setLocation(path, props, replace) {
+  //   setLocation(path, props, replace);
+  // }
 
   render() {
     console.log('RENDER', this.props);

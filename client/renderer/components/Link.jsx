@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { setLocation } from '../../resources/location'
 
 export default class Link extends React.Component {
 
@@ -9,9 +10,9 @@ export default class Link extends React.Component {
     props: React.PropTypes.object,
   }
 
-  static contextTypes = {
-    setLocation: React.PropTypes.func.isRequired
-  }
+  // static contextTypes = {
+  //   setLocation: React.PropTypes.func.isRequired
+  // }
 
   constructor(props) {
     super(props);
@@ -28,7 +29,7 @@ export default class Link extends React.Component {
 
     if (this.props.path){
       event.preventDefault();
-      this.context.setLocation(
+      setLocation(
         this.props.path,
         this.props.params,
       );

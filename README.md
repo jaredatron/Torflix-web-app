@@ -1,5 +1,13 @@
 # Torflix Web App
 
+## Development
+
+Starting the app
+
+```sh
+./bin/web_server
+```
+
 ## Architecture
 
 - state is derived entirely from streams
