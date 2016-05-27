@@ -42,8 +42,8 @@ class App extends React.Component {
   getChildContext() {
     return {
       emit:   this.props.emit,
-      path:   this.props.state.path,
-      params: this.props.state.params,
+      path:   this.props.state.route.path,
+      params: this.props.state.route.params,
     };
   }
 
@@ -51,7 +51,7 @@ class App extends React.Component {
     console.log('RENDER', this.props);
     const state = this.props.state
     if (state){
-      return <state.page {...state} />
+      return <state.route.page {...state} />
     }else{
       return <div>
         <span>State Error:</span>

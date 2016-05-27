@@ -1,21 +1,23 @@
 import Rx from 'rx'
-import searchToObject from '../../lib/search_to_object'
 
-let setLocationStream = new Rx.ReplaySubject(1);
-setLocationStream.onNext();
-let popstateStream = Rx.Observable.fromEvent(window, 'popstate');
+export default function location(events){
+  let setLocationStream = new Rx.ReplaySubject(1);
+  setLocationStream.onNext();
+  let popstateStream = Rx.Observable.fromEvent(window, 'popstate');
 
-let locationStream = Rx.Observable.merge(
-  setLocationStream, popstateStream
-).map(()=>{
-  console.log('locationStream fired')
-  return {
-    path:   location.pathname,
-    params: searchToObject(location.search),
-  }
-});
+  let state = Rx.Observable.merge(
+    setLocationStream, popstateStream
+  ).map(()=>{
+    console.log('locationStream fired')
+    return {
+      path:   window.location.pathname,
+      params: searchToObject(window.location.search),
+    }
+  });
 
-export { locationStream }
+  return state;
+}
+
 
 export function setLocation(path, params, replace){
   var href = hrefFor(path, params);
@@ -62,6 +64,18 @@ const objectToQueryString = (params) => {
   return pairs.join('&');
 }
 
+const searchToObject = (search) => {
+  let params = {};
+  search = search.substring(search.indexOf('?') + 1, search.length);
+  if (search.length === 0) return params;
+  search.split(/&+/).forEach( param => {
+    let [key, value] = param.split('=');
+    key = decodeURIComponent(key);
+    value = value ? decodeURIComponent(value) : true;
+    params[key] = value;
+  });
+  return params;
+}
 
 
 
