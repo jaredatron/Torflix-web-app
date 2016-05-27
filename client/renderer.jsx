@@ -1,6 +1,7 @@
 import RxDOM from 'rx-dom'
 import React from 'react'
 import ReactDOM from 'react-dom'
+import LoginPage from './renderer/pages/login_page.jsx'
 
 require('./renderer/style/main.sass')
 
@@ -51,14 +52,14 @@ class App extends React.Component {
   render() {
     // console.log('RENDER', this.props);
     const state = this.props.state
-    if (state){
-      return <state.route.page {...state} />
-    }else{
-      return <div>
-        <span>State Error:</span>
-        <span>{JSON.stringify(this.props)}</span>
-      </div>
-    }
+    if (!state) return <div>
+      <span>State Error:</span>
+      <span>{JSON.stringify(this.props)}</span>
+    </div>
+
+    if (!state.auth) return <LoginPage {...state} />
+
+    return <state.route.page {...state} />
   }
 
 }
