@@ -1,6 +1,8 @@
 import Putio from 'put.io'
+import request from './request'
 
 var matches = location.hash.match(/^#access_token=([^&]+)/)
+
 const accessToken = matches ? matches[1] : null
 
 const putio = new Putio({
@@ -10,6 +12,7 @@ const putio = new Putio({
   redirectURI: PUTIO_REDIRECT_URI,
   oAuthResponseType: 'token',
   accessToken: accessToken,
+  request:     request,
 })
 
 export default putio

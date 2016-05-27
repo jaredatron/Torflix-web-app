@@ -16,6 +16,11 @@ export default function(events){
   let update = () => {
     if (putio.accessToken){
       stateStream.onNext({})
+      putio.accountInfo().subscribe(
+        creds => { stateStream.onNext(creds) },
+        error => { stateStream.onNext({error:true}) }
+      )
+
     }else{
       stateStream.onNext(null)
     }
