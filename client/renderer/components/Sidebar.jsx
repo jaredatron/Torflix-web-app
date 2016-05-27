@@ -19,15 +19,19 @@ export default class Sidebar extends React.Component {
 
   render() {
     const auth = this.context.state.auth
+    const now = this.context.state.now
     return <div className="theme-dark rows">
       <Link path="/"         >Torflix</Link>
       <Link path="/search"   >Search</Link>
       <Link path="/transfers">Transfers</Link>
       <Link path="/files"    >Files</Link>
       <LogoutLink>Logout</LogoutLink>
-      <img src={auth.avatar_url} />
+      <div>
+        <img src={auth.avatar_url} />
+      </div>
       <div>{auth.username}</div>
       <Link onClick={this.logState}>Log State</Link>
+      <small>{now+''}</small>
     </div>
   }
 
