@@ -1,14 +1,13 @@
 import renderer from './renderer.jsx';
 import events from './events';
 import State from './state';
-import now from './resources/now'
-import route from './resources/route'
 
 const App = {
 
   events: events,
 
   emit: (event) => {
+    event = typeof event === 'string'? { type: event } : event
     App.events.onNext(event)
   },
 
@@ -17,10 +16,27 @@ const App = {
   },
 }
 
+// import keypress  from './resources/keypress'
+
+
+import now       from './resources/now'
+import route     from './resources/route'
+import transfers from './resources/transfers'
+
 App.state = new State(App.events, {
   now: now,
   route: route,
+  transfers: transfers,
 })
+
+
+Rx.Observable.fromEvent(window, 'keydown').subscribe(App.emit)
+
+export default App
+
+// debugging
+
+window.App = App;
 
 App.state.subscribe(
   state => {
@@ -33,5 +49,3 @@ App.events.subscribe(
     console.log('EVENT', event)
   }
 )
-
-export default App

@@ -1,11 +1,12 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import RxDOM from 'rx-dom'
+import React from 'react'
+import ReactDOM from 'react-dom'
 
 require('./renderer/style/main.sass')
 
 let Renderer = {
   render(DOMNode, stateStream, emit) {
-    return stateStream.subscribe(
+    return stateStream.observeOn(Rx.Scheduler.requestAnimationFrame).subscribe(
       state => {
         let props = {
           emit: emit,

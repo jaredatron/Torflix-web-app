@@ -1,8 +1,17 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import Layout from '../components/Layout.jsx';
 
 export default class TransfersPage extends React.Component {
+
+  static contextTypes = {
+    emit: React.PropTypes.func.isRequired
+  }
+
+  componentDidMount(){
+    if (!this.props.transfers.loaded){
+      this.context.emit('transfers:load')
+    }
+  }
 
   render() {
     return <Layout>
