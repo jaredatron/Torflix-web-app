@@ -26,7 +26,7 @@
     "normalize.css": "^4.1.1",
     "react": "^15.0.1",
     "react-dom": "^15.0.1",
-    "rx-dom": "git@github.com:Reactive-Extensions/RxJS-DOM.git#v7.0.3",
+    "rx-dom": "git@github.com:deadlyicon/RxJS-DOM.git",
     "sass-loader": "^3.2.0",
     "style-loader": "^0.13.1",
     "urijs": "^1.18.0",
