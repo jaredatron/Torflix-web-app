@@ -1,5 +1,6 @@
 import Rx from 'rx-dom'
 import putio from '../putio'
+import TorrentSearch from '../torrent_search'
 
 export default function(events){
   let stateStream = new Rx.ReplaySubject(1);
@@ -10,19 +11,26 @@ export default function(events){
     }
   })
 
-  var currentQuery = null
+  var querySubscription = null
 
   const search = (query) => {
-    currentQuery = query
-    update({wtf: 232321})
-    // putio.transfers().subscribe( transfers => {
-    //   console.log('transfers', transfers);
-    //   state.transfers = transfers;
-    //   state.loaded = true;
-    // })
-    setTimeout(()=>{
-      update({ results: [] })
-    }, 5000)
+    if (querySubscription) querySubscription.unsubscribe()
+    var state = {}
+    update(state)
+    querySubscription = TorrentSearch.search(query).subscribe(
+      results => {
+        state.results = results
+        update(state)
+      },
+      error => {
+        state.error = error
+        update(state)
+      },
+      complete => {
+        state.complete = true
+        update(state)
+      }
+    )
   }
 
   const update = (results) => {

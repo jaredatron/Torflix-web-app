@@ -28,9 +28,6 @@ export default class SearchPage extends React.Component {
   render() {
     const query = this.props.route.params.query
     const search = this.props.search || {}
-
-    console.log('search', search)
-
     const searchResults = search.results ?
       <SearchResults results={search.results} /> :
       <div>Loading...</div>
