@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Link from './link.jsx';
+import SearchInput from './search_input.jsx';
 
 export default class Navbar extends React.Component {
 
@@ -27,10 +28,11 @@ export default class Navbar extends React.Component {
       <Link path="/files"    >Files</Link>
       <Link onClick={this.logState}>Log State</Link>
       <div className="grow" />
+      <div><SearchInput /></div>
       <LogoutLink>Logout</LogoutLink>
       <div>{auth.username}</div>
-      <img src={auth.avatar_url} />
     </div>
+    // <img src={auth.avatar_url} />
     // <small>{now+''}</small>
   }
 

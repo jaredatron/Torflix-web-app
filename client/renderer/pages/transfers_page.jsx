@@ -19,7 +19,6 @@ export default class TransfersPage extends React.Component {
       'Loading...'
 
     return <Layout>
-      <h1>Transfers</h1>
       {transfers}
     </Layout>
   }

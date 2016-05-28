@@ -21,17 +21,19 @@ const App = {
 
 import now       from './resources/now'
 import route     from './resources/route'
-import auth from './resources/auth'
+import auth      from './resources/auth'
 import transfers from './resources/transfers'
+import search    from './resources/search'
 
 App.state = new State(App.events, {
   now: now,
   route: route,
   auth: auth,
   transfers: transfers,
+  search: search,
 })
 
-Rx.Observable.fromEvent(window, 'keydown').subscribe(App.emit)
+// Rx.Observable.fromEvent(window, 'keydown').subscribe(App.emit)
 
 export default App
 
