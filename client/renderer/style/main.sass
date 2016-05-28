@@ -1,5 +1,8 @@
 @import "~normalize.css"
 
+$blue: #3E75FF
+
+
 html, body
   padding: 0
   margin: 0
@@ -60,6 +63,9 @@ body > main
     border: none
     &, &:hover, &:active
       color: white
+      outline: none
+    &:hover, &:focus
+      background-color: $blue
 
 
 @import "./components/navbar"

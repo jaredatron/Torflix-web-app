@@ -29,7 +29,7 @@ export default class Navbar extends React.Component {
       <div className="grow" />
       <LogoutLink>Logout</LogoutLink>
       <div>{auth.username}</div>
-      <div> <img src={auth.avatar_url} /> </div>
+      <img src={auth.avatar_url} />
     </div>
     // <small>{now+''}</small>
   }
