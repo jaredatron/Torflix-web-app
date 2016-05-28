@@ -17,7 +17,6 @@ body > main
   right: 0
   height: 100%
   width: 100%
-  background-color: green
 
 
 // Flexbox
@@ -49,13 +48,18 @@ body > main
   flex-grow: 1
   flex-shrink: 1
 
+
 // Themes
 
 .theme-dark
   background-color: black
   color: white
 
-  .Button
+  .link
     background: transparent
     border: none
-    color: inherit
+    &, &:hover, &:active
+      color: white
+
+
+@import "./components/navbar"

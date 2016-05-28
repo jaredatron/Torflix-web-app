@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Link from './link.jsx';
 
-export default class Sidebar extends React.Component {
+export default class Navbar extends React.Component {
 
   static contextTypes = {
     state: React.PropTypes.object.isRequired
@@ -20,19 +20,18 @@ export default class Sidebar extends React.Component {
   render() {
     const auth = this.context.state.auth
     const now = this.context.state.now
-    return <div className="theme-dark rows">
+    return <div className="navbar theme-dark columns">
       <Link path="/"         >Torflix</Link>
       <Link path="/search"   >Search</Link>
       <Link path="/transfers">Transfers</Link>
       <Link path="/files"    >Files</Link>
-      <LogoutLink>Logout</LogoutLink>
-      <div>
-        <img src={auth.avatar_url} />
-      </div>
-      <div>{auth.username}</div>
       <Link onClick={this.logState}>Log State</Link>
-      <small>{now+''}</small>
+      <div className="grow" />
+      <LogoutLink>Logout</LogoutLink>
+      <div>{auth.username}</div>
+      <div> <img src={auth.avatar_url} /> </div>
     </div>
+    // <small>{now+''}</small>
   }
 
 }

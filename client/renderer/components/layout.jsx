@@ -6,10 +6,8 @@ export default class Layout extends React.Component {
 
   render() {
     return <div>
-      <Navbar auth={this.props.auth}/>
-      <div className="grow">
-        {this.props.children}
-      </div>
+      <Navbar/>
+      {this.props.children}
     </div>
   }
 

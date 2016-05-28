@@ -45,7 +45,7 @@ export default class Link extends React.Component {
     let props = {}
     props.href = this.props.href || this.props.path || "javascript:void(null);";
     props.className = this.props.className || "";
-    props.className = "PageLink "+this.props.className;
+    props.className = "link "+this.props.className;
     props.onClick = this.onClick;
 
     // return <a href={href} className={className} onClick={this.onClick}>
