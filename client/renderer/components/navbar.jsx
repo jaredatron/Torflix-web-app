@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Link from './Link.jsx';
+import Link from './link.jsx';
 
 export default class Sidebar extends React.Component {
 

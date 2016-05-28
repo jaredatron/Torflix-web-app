@@ -1,6 +1,6 @@
 import React from 'react';
-import Layout from '../components/Layout.jsx';
-import Link from '../components/Link.jsx';
+import Layout from '../components/layout.jsx';
+import Link from '../components/link.jsx';
 import putio from '../../putio'
 
 export default class TransfersPage extends React.Component {

@@ -1,5 +1,5 @@
 import React from 'react';
-import Layout from '../components/Layout.jsx';
+import Layout from '../components/layout.jsx';
 
 export default class TransfersPage extends React.Component {
 

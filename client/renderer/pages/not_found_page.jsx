@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Layout from '../components/Layout.jsx';
+import Layout from '../components/layout.jsx';
 
 export default class NotFoundPage extends React.Component {
 
