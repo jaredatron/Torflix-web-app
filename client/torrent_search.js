@@ -3,7 +3,7 @@ import URI from 'urijs'
 
 const TorrentSearch = {
   search(query){
-    let url = URI('http://torrentz.com/search').query({q: query})
+    let url = URI('http://torrentz.com/search').query({q: query}).toString()
     return request({
       serverProxy: true,
       method: 'GET',

@@ -1,6 +1,6 @@
 import Rx from 'rx-dom'
 import superagent from 'superagent'
-import URI from 'urijs'
+import httpRequest from '../lib/http_request'
 
 const ORIGIN = window.location.origin
 const COMPLETE_URL = /^https?:\/\//;
@@ -29,27 +29,12 @@ const COMPLETE_URL = /^https?:\/\//;
 
 export default function(options){
   options.method = options.method || 'get'
+  options.url = options.url.toString()
   if (options.serverProxy){
     return observableProxiedHttpRequest(options)
   }else{
     return observableHttpRequest(options)
   }
-}
-
-const httpRequest = (options, callback) => {
-  var method = options.method.toLowerCase();
-  var url = options.url;
-  var request = superagent[method](url);
-  if (options.query) request.query(options.query)
-  if (method === 'post' && options.body) request.send(options.body)
-  if (options.type) request.type(options.type)
-  if (options.accept) request.accept(options.accept)
-  if (options.headers){
-    Object.keys(options.headers).forEach( key => {
-      request.set(key, options.headers[key])
-    })
-  }
-  return request.end(callback);
 }
 
 const observableHttpRequest = (options) => {
@@ -71,10 +56,11 @@ const observableHttpRequest = (options) => {
 }
 
 const observableProxiedHttpRequest = (options) => {
+  console.info('PROXY REQUEST', options)
   return observableHttpRequest({
     method: 'post',
     url: ORIGIN+'/_proxy',
-    body: JSON.stringify(options),
+    body: options,
   })
 }
 //     var proxyOptions = {
