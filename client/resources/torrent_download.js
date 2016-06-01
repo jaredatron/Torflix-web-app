@@ -24,6 +24,7 @@ export default function(events){
     publish()
     downloadState.querySubscription = Torrents.getMagnetLink(torrentId).subscribe(
       update => {
+        downloadState.magnetLink = update.magnetLink
         downloadState.torrentName = update.torrentName
         downloadState.trackers = update.trackers
         downloadState.error = update.error

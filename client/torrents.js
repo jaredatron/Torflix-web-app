@@ -4,42 +4,70 @@ import URI from 'urijs'
 
 const TORRENTZ_HOST = 'http://torrentz.com'
 
+const get = (url) => {
+  return request({
+    serverProxy: true,
+    method: 'GET',
+    url: url,
+  }).map(response => {
+    const html = document.createElement('html')
+    html.innerHTML = response.text
+    return html
+  })
+
+}
+
 const TorrentSearch = {
   search(query){
     return getSearchResults(query)
   },
 
   getMagnetLink(torrentId){
-    // return getTorrentTrackersPage(torrentId)
-    //   .map(parseTorrentTrackersPage)
-    //   .map(findMagnetLinkFromTrackers)
-
     let state = {
       torrentId: torrentId,
       error: null,
       errorMessage: null,
       trackers: null,
+      magnetLink: null,
     }
     return Rx.Observable.create( observer => {
       observer.onNext(state)
 
-      let getTrackersForTorrentIdSubscription = getTrackersForTorrentId(torrentId).subscribe(
+      var getTrackersForTorrentIdSubscription = null
+      var getMagnetLinkForTrackersSubscription = null
+
+      getTrackersForTorrentIdSubscription = getTrackersForTorrentId(torrentId).subscribe(
         results => {
           state.torrentName = results.torrentName;
           state.trackers = results.trackers;
           observer.onNext(state)
+
+          getMagnetLinkForTrackersSubscription = getMagnetLinkForTrackers(results.trackers).subscribe(
+            magnetLink => {
+              state.magnetLink = magnetLink;
+              observer.onNext(state)
+            },
+            error => {
+              console.error(error)
+              state.error = error;
+              state.errorMessage = 'unable to find magnet link from trackers'
+              observer.onNext(state)
+            }
+          )
         },
 
         error => {
           console.error(error)
           state.error = error;
           state.errorMessage = 'unable to find trackers'
-          observer.onCompleted(state)
+          observer.onNext(state)
         }
       )
 
       return () => {
-        getTrackersForTorrentIdSubscription.dispose()
+        console.warn('dispose called on getMagnetLink observable')
+        if (getTrackersForTorrentIdSubscription) getTrackersForTorrentIdSubscription.dispose()
+        if (getMagnetLinkForTrackersSubscription) getMagnetLinkForTrackersSubscription.dispose()
       }
 
     })
@@ -52,37 +80,107 @@ export default TorrentSearch
 
 const getSearchResults = (query) => {
   let url = URI(TORRENTZ_HOST+'/search').query({q: query}).toString()
-  return request({
-    serverProxy: true,
-    method: 'GET',
-    url: url,
-  }).map(parseSearchResults)
+  return get(url).map(parseSearchResults)
 }
 
 const getTrackersForTorrentId = (torrentId) => {
-  return request({
-    serverProxy: true,
-    method: 'GET',
-    url: TORRENTZ_HOST+'/'+torrentId,
-  }).map(parseTorrentTrackersPage)
+  return get(TORRENTZ_HOST+'/'+torrentId).map(parseTorrentTrackersPage)
 }
 
-const findMagnetLinkFromTrackers = (trackers) => {
-  debugger
-  return null
+const getMagnetLinkForTrackers = (trackers) => {
+  var requests = []
+  trackers.forEach(url => {
+    let domain = URI(url).domain()
+    let parser = trackerParsers[domain] || trackerParsers.default
+    requests.push(parser(url))
+  })
+
+  var subscriptions = []
+  return Rx.Observable.create( observer => {
+    requests.forEach(request => {
+      subscriptions.push(request.subscribe(
+        magnetLink => {
+          console.log('magnetLink', magnetLink)
+          if (magnetLink){
+            subscriptions.forEach(subscription => { subscription.dispose() })
+            observer.onNext(magnetLink)
+            // observer.onCompleted(magnetLink)
+          }
+        },
+        error => {
+          console.warn('error parsing magnet link from tracker')
+          console.error(error)
+        },
+        () => {
+          console.log('REQ complete')
+        }
+      ))
+    })
+  })
+}
+
+const pluckFirstMagnetLink = html => {
+  return html.querySelector('a[href^="magnet:"]').href
+}
+
+const trackerParsers = {
+  'default': (url) => {
+    return get(url).map(pluckFirstMagnetLink)
+  },
+  'kat.cr': (url) => {
+    return get(url).map( html => {
+      return html.querySelector('a[title="Magnet link"]').href
+    })
+  },
+  'torrenthound.com': (url) => {
+    return get(url).map( html => {
+      return html.querySelector('a[title="Magnet download"]').href
+    })
+  },
+  // 'rarbg.com': (url) => {
+  //   return get(url).map(pluckFirstMagnetLink)
+  // },
+  // 'www.torlock.com': (url) => {
+  //   return get(url).map( html => {
+  //     debugger
+  //   })
+  // },
+  // 'www.monova.org': (url) => {
+  //   return get(url).map( html => {
+  //     debugger
+  //   })
+  // },
+  // 'www.seedpeer.me': (url) => {
+  //   return get(url).map( html => {
+  //     debugger
+  //   })
+  // },
+  // 'www.torrentdownloads.me': (url) => {
+  //   return get(url).map( html => {
+  //     debugger
+  //   })
+  // },
+  // 'www.torrentfunk.com': (url) => {
+  //   return get(url).map( html => {
+  //     debugger
+  //   })
+  // },
+  // 'www.limetorrents.cc': (url) => {
+  //   return get(url).map( html => {
+  //     debugger
+  //   })
+  // },
+  // 'torrentproject.se': (url) => {
+  //   return get(url).map( html => {
+  //     debugger
+  //   })
+  // },
 }
 
 
 // parsers
 
-const parseHTML = innerHTML => {
-  const html = document.createElement('html')
-  html.innerHTML = innerHTML
-  return html
-}
-
-const parseSearchResults = response => {
-  let html = parseHTML(response.text)
+const parseSearchResults = html => {
   let results = [];
   [].forEach.call(html.querySelectorAll('.results > dl'), node => {
     let result = {};
@@ -106,13 +204,13 @@ const parseSearchResults = response => {
     }catch(error){
       console.warn('failed to parse torrentz.com result html', node)
       console.error(error)
+      debugger
     }
   })
   return results
 }
 
-const parseTorrentTrackersPage = response => {
-  let html = parseHTML(response.text)
+const parseTorrentTrackersPage = html => {
   let torrentName = html.querySelector('.download > h2 > span').innerText
   let links = html.querySelectorAll('.download > dl > dt > a[href][rel=e]')
   let trackers = [].map.call(links, link => link.href)
