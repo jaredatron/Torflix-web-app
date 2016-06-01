@@ -1,6 +1,7 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import Layout from '../components/layout.jsx';
+import React from 'react'
+import ReactDOM from 'react-dom'
+import Layout from '../components/layout.jsx'
+import Link from '../components/link.jsx'
 
 export default class SearchPage extends React.Component {
 
@@ -44,9 +45,7 @@ class SearchResults extends React.Component {
     const results = this.props.results.map(
       result => <SearchResult key={result.id} result={result} />
     )
-    return <table>
-      <tbody>{results}</tbody>
-    </table>
+    return <div>{results}</div>
   }
 }
 
@@ -54,16 +53,15 @@ class SearchResults extends React.Component {
 class SearchResult extends React.Component {
   render(){
     const result = this.props.result
-    return <tr>
-      <td>
-        <a href={result.href}>{result.name}</a>
-      </td>
-      <td>
+    return <div>
+      <div>
+        <Link path={'/download/torrentz/'+result.id}>{result.name}</Link>
+      </div>
+      <div>
         {result.rating}
-      </td>
-      <td>
+        {' | '}
         {result.createdAtAgo}
-      </td>
-    </tr>
+      </div>
+    </div>
   }
 }
