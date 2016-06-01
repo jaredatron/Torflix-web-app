@@ -11,11 +11,14 @@ export default function(events){
     }
   })
 
+  var state = {}
   var querySubscription = null
 
   const search = (query) => {
+    if (state.query === query) return;
     if (querySubscription) querySubscription.dispose()
-    var state = {}
+    state.query = query
+    state.results = null
     update(state)
     querySubscription = TorrentSearch.search(query).subscribe(
       results => {
@@ -31,6 +34,7 @@ export default function(events){
         update(state)
       }
     )
+    querySubscription.query = query;
   }
 
   const update = (results) => {

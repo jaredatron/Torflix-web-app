@@ -1,0 +1,26 @@
+.search-results
+  // background-color: red
+
+  .search-result
+    padding: 0.25em 0.5em
+    background-color: $white
+    &:nth-child(even)
+      background-color: $lightgrey
+
+  .search-result-details
+    font-size: 85%
+
+  .search-results-rating
+    color: $white
+    border-radius: 100px
+    padding: 1px 5px
+    font-size: 90%
+    line-height: 110%
+    &.rating-awesome
+      background-color: red
+    &.rating-great
+      background-color: orange
+    &.rating-good
+      background-color: blue
+    &.rating-neutral
+      background-color: $darkgrey

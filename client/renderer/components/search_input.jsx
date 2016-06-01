@@ -27,6 +27,7 @@ export default class Navbar extends React.Component {
       className="SearchInput"
       defaultValue={query}
       onKeyDown={this.onKeyDown}
+      autoFocus={this.props.autoFocus}
     />
   }
 }

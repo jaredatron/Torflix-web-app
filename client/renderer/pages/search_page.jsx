@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import Layout from '../components/layout.jsx'
-import Link from '../components/link.jsx'
+import SearchResults from '../components/search_results.jsx'
 
 export default class SearchPage extends React.Component {
 
@@ -32,36 +32,9 @@ export default class SearchPage extends React.Component {
     const searchResults = search.results ?
       <SearchResults results={search.results} /> :
       <div>Loading...</div>
-    return <Layout>
-      <h1>Search Page {query}</h1>
+    return <Layout className="search-page">
       {searchResults}
     </Layout>
   }
 
-}
-
-class SearchResults extends React.Component {
-  render(){
-    const results = this.props.results.map(
-      result => <SearchResult key={result.id} result={result} />
-    )
-    return <div>{results}</div>
-  }
-}
-
-
-class SearchResult extends React.Component {
-  render(){
-    const result = this.props.result
-    return <div>
-      <div>
-        <Link path={'/download/torrentz/'+result.id}>{result.name}</Link>
-      </div>
-      <div>
-        {result.rating}
-        {' | '}
-        {result.createdAtAgo}
-      </div>
-    </div>
-  }
 }

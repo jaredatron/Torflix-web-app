@@ -28,7 +28,7 @@ export default class Navbar extends React.Component {
       <Link path="/files"    >Files</Link>
       <Link onClick={this.logState}>Log State</Link>
       <div className="grow" />
-      <div><SearchInput /></div>
+      <div><SearchInput autoFocus /></div>
       <LogoutLink>Logout</LogoutLink>
       <div>{auth.username}</div>
     </div>
@@ -54,6 +54,6 @@ class LogoutLink extends React.Component {
   }
 
   render(){
-    return <Link onClick={this.logout}>{this.props.children}</Link>
+    return <Link tabIndex="-1" onClick={this.logout}>{this.props.children}</Link>
   }
 }

@@ -37,7 +37,7 @@ export default function location(events){
 }
 
 const locationToString = (path, params) => {
-  return ensureSlashPrefix(path)+objectToSearch(params);
+  return ensureSlashPrefix(path).replace(/ /g, '+')+objectToSearch(params)
 }
 
 const hrefFor = (path, params) => {
