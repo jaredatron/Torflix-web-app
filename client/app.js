@@ -43,6 +43,7 @@ import route     from './resources/route'
 import auth      from './resources/auth'
 import transfers from './resources/transfers'
 import search    from './resources/search'
+import torrentDownload from './resources/torrent_download'
 
 App.state = new State(App.events, {
   now: now,
@@ -50,6 +51,7 @@ App.state = new State(App.events, {
   auth: auth,
   transfers: transfers,
   search: search,
+  torrentDownload: torrentDownload,
 })
 
 // Rx.Observable.fromEvent(window, 'keydown').subscribe(App.emit)
