@@ -41,6 +41,29 @@ export default class SearchPage extends React.Component {
 
 class SearchResults extends React.Component {
   render(){
-    return <div>SearchResults</div>
+    const results = this.props.results.map(
+      result => <SearchResult key={result.id} result={result} />
+    )
+    return <table>
+      <tbody>{results}</tbody>
+    </table>
+  }
+}
+
+
+class SearchResult extends React.Component {
+  render(){
+    const result = this.props.result
+    return <tr>
+      <td>
+        <a href={result.href}>{result.name}</a>
+      </td>
+      <td>
+        {result.rating}
+      </td>
+      <td>
+        {result.createdAtAgo}
+      </td>
+    </tr>
   }
 }

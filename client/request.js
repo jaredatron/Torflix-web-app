@@ -5,28 +5,6 @@ import httpRequest from '../lib/http_request'
 const ORIGIN = window.location.origin
 const COMPLETE_URL = /^https?:\/\//;
 
-// const httpRequest = (options) => {
-//   if (!COMPLETE_URL.test(options.url)){
-//     if (options.url[0] !== '/') options.url = '/'+options.url;
-//     options.url = ORIGIN+'/'+options.url;
-//   }
-//   console.info('HTTP REQUEST', options)
-
-
-
-//   var request = superagent[options.method.toLowerCase()](options.url, options)
-//   debugger
-//   return Rx.Observable.create(function (observer) {
-//     observer.onNext(42);
-//     observer.onCompleted();
-
-//     // Note that this is optional, you do not have to return this if you require no cleanup
-//     return function () {
-//       request.abort();
-//     };
-//   });
-// }
-
 export default function(options){
   options.method = options.method || 'get'
   options.url = options.url.toString()

@@ -14,7 +14,7 @@ export default function(events){
   var querySubscription = null
 
   const search = (query) => {
-    if (querySubscription) querySubscription.unsubscribe()
+    if (querySubscription) querySubscription.dispose()
     var state = {}
     update(state)
     querySubscription = TorrentSearch.search(query).subscribe(
