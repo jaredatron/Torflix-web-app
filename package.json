@@ -9,7 +9,9 @@
   "author": "Jared Grippe",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.13.4"
+    "body-parser": "^1.15.1",
+    "express": "^4.13.4",
+    "superagent": "^2.0.0"
   },
   "devDependencies": {
     "babel-cli": "^6.7.5",
@@ -21,6 +23,7 @@
     "babel-runtime": "^6.6.1",
     "css-loader": "^0.23.1",
     "dotenv": "^2.0.0",
+    "json-loader": "^0.5.4",
     "node-pow": "0.0.2",
     "node-sass": "^3.7.0",
     "normalize.css": "^4.1.1",
@@ -29,7 +32,7 @@
     "rx-dom": "git@github.com:deadlyicon/RxJS-DOM.git",
     "sass-loader": "^3.2.0",
     "style-loader": "^0.13.1",
-    "urijs": "^1.18.0",
+    "urijs": "^1.18.1",
     "webpack": "^1.13.0",
     "webpack-dev-middleware": "^1.6.1",
     "webpack-dev-server": "^1.14.1"

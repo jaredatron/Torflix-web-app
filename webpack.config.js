@@ -11,7 +11,7 @@ var constants = new webpack.DefinePlugin({
 
 module.exports = {
   entry: {
-    app: ['./client.js',]
+    app: ['./client.js']
   },
   output: {
     publicPath: '/',
@@ -22,12 +22,21 @@ module.exports = {
   plugins: [
     constants
   ],
+  resolve: {
+    modulesDirectories: [path.resolve(__dirname, 'node_modules')],
+  },
   module: {
+    noParse: /node_modules\/json-schema\/lib\/validate\.js/,
     loaders: [
+      {
+        test: /\.json$/,
+        loader: 'json-loader'
+      },
       {
         test: /.jsx?$/,
         loader: 'babel-loader',
-        exclude: /node_modules|put\.io|RxJS-DOM/,
+        include: __dirname,
+        exclude: path.resolve(__dirname, 'node_modules'),
         query: {
           // presets: ['es2015', 'react']
           presets: ['es2015', 'react', 'stage-0']
