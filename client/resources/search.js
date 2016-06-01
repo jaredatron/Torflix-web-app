@@ -1,6 +1,6 @@
 import Rx from 'rx-dom'
 import putio from '../putio'
-import TorrentSearch from '../torrent_search'
+import Torrents from '../torrents'
 
 export default function(events){
   let stateStream = new Rx.ReplaySubject(1);
@@ -20,7 +20,7 @@ export default function(events){
     state.query = query
     state.results = null
     update(state)
-    querySubscription = TorrentSearch.search(query).subscribe(
+    querySubscription = Torrents.search(query).subscribe(
       results => {
         state.results = results
         update(state)

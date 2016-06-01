@@ -1,6 +1,6 @@
 import Rx from 'rx-dom'
 import putio from '../putio'
-import TorrentSearch from '../torrent_search'
+import Torrents from '../torrents'
 
 export default function(events){
   let stateStream = new Rx.ReplaySubject(1);
@@ -12,7 +12,7 @@ export default function(events){
   })
 
   var state = {}
-  const update = () => {
+  const publish = () => {
     stateStream.onNext(state)
   }
 
@@ -21,24 +21,27 @@ export default function(events){
   const downloadTorrent = (torrentId) => {
     if (state[torrentId]) return
     let downloadState = state[torrentId] = {}
-    update()
-    downloadState.querySubscription = TorrentSearch.getTorrent(torrentId).subscribe(
-      results => {
-        state.results = results
-        update()
+    publish()
+    downloadState.querySubscription = Torrents.getMagnetLink(torrentId).subscribe(
+      update => {
+        downloadState.torrentName = update.torrentName
+        downloadState.trackers = update.trackers
+        downloadState.error = update.error
+        downloadState.errorMessage = update.errorMessage
+        publish()
       },
       error => {
-        state.error = error
-        update()
+        downloadState.error = error
+        publish()
       },
       complete => {
-        state.complete = true
-        update()
+        downloadState.complete = true
+        publish()
       }
     )
   }
 
 
-  update()
+  publish()
   return stateStream;
 }

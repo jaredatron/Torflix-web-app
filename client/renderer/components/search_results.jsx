@@ -17,7 +17,7 @@ class SearchResult extends React.Component {
     const result = this.props.result
     return <div className="search-result">
       <div>
-        <Link path={'/download/torrentz/'+result.id}>{result.name}</Link>
+        <Link path={'/download/torrent/'+result.id}>{result.name}</Link>
       </div>
       <ol className="search-result-details inline-list separated-list">
         <li><SearchResultRating rating={result.rating} /></li>

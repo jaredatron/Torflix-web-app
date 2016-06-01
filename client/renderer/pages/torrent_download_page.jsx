@@ -34,9 +34,14 @@ export default class TorrentDownloadPage extends React.Component {
   render() {
     const torrentId = this.torrentId()
     const downloadState = this.props.torrentDownload[torrentId] || {}
-    // downloadState
+    // console.info('downloadState', downloadState)
+    const torrentName = downloadState.torrentName || torrentId
+    const stateDescription = downloadState.trackers ?
+      'Searching for magnet link' :
+      'Searching for trackers'
     return <Layout>
-      Searching for torrent {torrentId}
+      <h1>Downloading {torrentName}</h1>
+      <h2>{stateDescription}</h2>
     </Layout>
   }
 
