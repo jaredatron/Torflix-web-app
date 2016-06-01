@@ -1,3 +1,4 @@
+import Rx from 'rx-dom'
 import renderer from './renderer.jsx';
 import events from './events';
 import State from './state';
@@ -11,8 +12,26 @@ const App = {
     App.events.onNext(event)
   },
 
-  render(DOMNode){
-    renderer.render(DOMNode, this.state, this.emit);
+  start(DOMNode){
+    this.state.observeOn(Rx.Scheduler.requestAnimationFrame).subscribe(
+      state => {
+        this._state = state
+        let props = {
+          emit: this.emit,
+          state: state,
+        }
+        this.instance = renderer.render(DOMNode, props);
+        // this.instance = ReactDOM.render(React.createElement(App, props), DOMNode);
+      },
+      error => {
+        console.warn('App Render Error');
+        console.error(error);
+      },
+      () => {
+        throw new Error('state stream should never complete');
+      },
+    );
+
   },
 }
 

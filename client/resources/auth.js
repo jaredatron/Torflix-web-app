@@ -17,8 +17,14 @@ export default function(events){
     if (putio.accessToken){
       stateStream.onNext({})
       putio.accountInfo().subscribe(
-        creds => { stateStream.onNext(creds) },
-        error => { console.error(error); stateStream.onNext({error:error}) }
+        creds => {
+          console.log('???', creds)
+          stateStream.onNext(creds)
+        },
+        error => {
+          console.error(error);
+          stateStream.onNext({error:error})
+        }
       )
 
     }else{
