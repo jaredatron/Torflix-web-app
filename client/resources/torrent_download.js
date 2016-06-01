@@ -24,24 +24,35 @@ export default function(events){
     publish()
     downloadState.querySubscription = Torrents.getMagnetLink(torrentId).subscribe(
       update => {
-        downloadState.magnetLink = update.magnetLink
         downloadState.torrentName = update.torrentName
         downloadState.trackers = update.trackers
         downloadState.error = update.error
         downloadState.errorMessage = update.errorMessage
+        downloadState.magnetLink = update.magnetLink
         publish()
+
+        if (downloadState.magnetLink){
+          downloadState.addTransferSubscription = putio.addTransfer(downloadState.magnetLink).subscribe(
+            transfer => {
+              console.log('addTransfer transfer', transfer)
+              downloadState.transfer = transfer
+              publish()
+            },
+
+            error => {
+              downloadState.error = error
+              publish()
+            }
+          )
+        }
+
       },
       error => {
         downloadState.error = error
         publish()
       },
-      complete => {
-        downloadState.complete = true
-        publish()
-      }
     )
   }
-
 
   publish()
   return stateStream;
