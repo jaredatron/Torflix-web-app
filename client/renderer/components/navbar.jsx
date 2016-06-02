@@ -13,7 +13,6 @@ export default class Navbar extends React.Component {
     const { auth, now, renderCount } = this.context.state
     return <div className="navbar theme-dark columns">
       <Link path="/"         >Torflix</Link>
-      <Link path="/search"   >Search</Link>
       <Link path="/transfers">Transfers</Link>
       <Link path="/files"    >Files</Link>
       <div className="grow" />
