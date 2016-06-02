@@ -3,4 +3,4 @@
 set -e
 set -x
 
-./node_modules/webpack/bin/webpack.js
+webpack
