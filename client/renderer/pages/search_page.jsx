@@ -8,7 +8,6 @@ export default class SearchPage extends Page {
 
   onStateChange(props){
     const query = props.route.params.query
-    console.info('SearchPage#beforeRender', this, query)
     if (this.query != query){
       this.query = query
       this.search(query)

@@ -9,7 +9,6 @@ export default class TransfersPage extends Page {
   }
 
   render(props) {
-    console.info('TransfersPage#render', props.transfers)
     const transfers = props.transfers.loaded ?
       <TransfersList transfers={props.transfers} /> :
       'Loading...'

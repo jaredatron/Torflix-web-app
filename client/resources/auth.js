@@ -7,7 +7,6 @@ export default function(events){
   const publish = () => { stateStream.onNext(state) }
 
   events.subscribe( event => {
-    console.log('EVENT (in auth)', event)
     if (event.type === 'auth:logout') {
       logout()
     }

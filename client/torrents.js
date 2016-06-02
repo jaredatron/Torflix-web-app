@@ -2,7 +2,7 @@ import Rx from 'rx-dom'
 import request from './request'
 import URI from 'urijs'
 
-const TORRENTZ_HOST = 'http://torrentz.com'
+const TORRENTZ_HOST = 'http://Torrentz.eu'
 
 const get = (url) => {
   return request({
