@@ -5,7 +5,10 @@ import ReactDOM from 'react-dom'
 require('./renderer/style/main.sass')
 
 const renderer = {
+  renderCount: 0,
+
   render(DOMNode, emit, page, state) {
+    state.renderCount = this.renderCount++
     const props = {
       emit: emit,
       page: page,
