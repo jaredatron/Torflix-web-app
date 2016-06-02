@@ -11,6 +11,7 @@ export default function(events){
   events.subscribe( event => {
     if (event.type === 'files:load')         return loadFile(event.fileId)
     if (event.type === 'files:reload')       return reloadFile(event.fileId)
+    if (event.type === 'files:loadDirectoryContents') return loadDirectoryContents(event.fileId)
     if (event.type === 'files:startPolling') return startPolling(event.fileId)
     if (event.type === 'files:stopPolling')  return stopPolling(event.fileId)
   })
@@ -28,7 +29,6 @@ export default function(events){
         console.log('file loaded', file);
         state[fileId] = file
         if (file.isDirectory && !file.directoryContentsLoaded && !file.loadingDirectoryContents){
-          file.loadingDirectoryContents = true
           loadDirectoryContents(fileId)
         }
         publish()
@@ -43,12 +43,15 @@ export default function(events){
   }
 
   const loadDirectoryContents = (fileId) => {
+    const file = state[fileId]
+    if (!file) throw new Error('failed to load directory contents for '+fileId)
+    file.loadingDirectoryContents = true
+    publish()
+
     putio.getDirectoryContents(fileId).subscribe(
       ({parent, files}) => {
         state[fileId] = parent
-        files.forEach( file => {
-          state[file.id] = file
-        })
+        files.forEach( file => state[file.id] = file )
         publish()
       },
 
