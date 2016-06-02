@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+set -e
+set -x
+
+./node_modules/webpack/bin/webpack.js

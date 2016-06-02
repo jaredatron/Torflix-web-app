@@ -4,7 +4,9 @@
   "description": "learning react",
   "repository": "https://github.com/deadlyicon/Torflix-web-app",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "./bin/web_server",
+    "postinstall": "./bin/post_install"
   },
   "author": "Jared Grippe",
   "license": "ISC",
