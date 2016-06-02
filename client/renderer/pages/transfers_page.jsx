@@ -1,6 +1,7 @@
 import React from 'react'
 import Page from '../page.js'
 import Layout from '../components/layout.jsx'
+import Link from '../components/link.jsx'
 
 export default class TransfersPage extends Page {
 
@@ -31,25 +32,23 @@ class TransfersList extends React.Component {
       return <TransferListItem key={transfer.id} transfer={transfer} />
     })
 
-    return <table className="TransfersList">
-      <thead>
-        <tr>
-          <th>Status</th>
-          <th>Name</th>
-        </tr>
-      </thead>
-      <tbody>
-        {transfers}
-      </tbody>
-    </table>
+    return <div className="transfers-list">{transfers}</div>
   }
 }
 
 class TransferListItem extends React.Component {
   render(){
-    return <tr>
-      <td>{this.props.transfer.status}</td>
-      <td>{this.props.transfer.name}</td>
-    </tr>
+    const transfer = this.props.transfer
+
+    const name = transfer.file_id ?
+      <Link path={`/files/${transfer.file_id}`}>{transfer.name}</Link> :
+      <div>{transfer.name}</div>
+
+    return <div className="transfers-list-transfer">
+      {name}
+      <div>
+        <small>{transfer.status_message}</small>
+      </div>
+    </div>
   }
 }

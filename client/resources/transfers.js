@@ -6,6 +6,10 @@ export default function(events){
 
   let state = {}
   let stateStream = new Rx.ReplaySubject(1)
+  // .subscribeOnCompleted( () => {
+  //   if (pollingStream) pollingStream.dispose()
+  //   pollingStream = null
+  // })
   let pollingStream = null
 
   events.subscribe( event => {
