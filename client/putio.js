@@ -12,11 +12,16 @@ const putio = new Putio({
   request:     request,
 })
 
+putio.loggedIn = () => {
+  return !!putio.accessToken
+}
+
 putio.login = () => {
   var matches = location.hash.match(/^#access_token=([^&]+)/)
   var accessToken
   if (matches){
     putio.accessToken = localStorage['putio.access_token'] = matches[1]
+    history.replaceState("", document.title, window.location.pathname + window.location.search);
   }
   putio.accessToken = localStorage['putio.access_token']
 }

@@ -1,30 +1,17 @@
 import Rx from 'rx-dom'
 import React from 'react'
 import ReactDOM from 'react-dom'
-import LoginPage from './renderer/pages/login_page.jsx'
 
 require('./renderer/style/main.sass')
 
 const renderer = {
-  render(DOMNode, emit, state) {
-    const Page = state.auth ? state.route.page : LoginPage
-
-    if (!this.page || !(this.page instanceof Page)){
-      if (this.page) this.page.onExit(state)
-      this.page = new Page
-      this.page.emit = emit
-      this.page.onEnter(state)
-    }
-
-    this.page.beforeRender(state)
+  render(DOMNode, emit, page, state) {
     const props = {
       emit: emit,
+      page: page,
       state: state,
-      page: this.page,
     }
-    const instance = ReactDOM.render(React.createElement(App, props), DOMNode);
-    this.page.afterRender(state)
-    return { instance, page }
+    return ReactDOM.render(React.createElement(App, props), DOMNode);
   }
 };
 

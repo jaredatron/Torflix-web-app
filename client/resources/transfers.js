@@ -4,8 +4,6 @@ import putio from '../putio'
 export default function(events){
   let state = {};
   let stateStream = new Rx.ReplaySubject(1);
-  // events.subscribe()
-
 
   events.subscribe( event => {
     if (event.type === 'transfers:load'){
@@ -22,14 +20,15 @@ export default function(events){
 
   const reloadTransfers = () => {
     putio.transfers().subscribe( transfers => {
-      console.log('transfers', transfers);
-      state.transfers = transfers;
-      state.loaded = true;
+      console.log('transfers loaded', transfers);
+      state.transfers = transfers
+      state.loaded = true
+      publish()
     })
-    update()
+    publish()
   }
 
-  const update = () => stateStream.onNext(state)
-  update()
+  const publish = () => stateStream.onNext(state)
+  publish()
   return stateStream;
 }

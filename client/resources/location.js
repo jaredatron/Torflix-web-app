@@ -1,7 +1,7 @@
 import Rx from 'rx-dom'
 
 export default function location(events){
-  let eventsStream = new Rx.ReplaySubject(1);
+  const eventsStream = new Rx.ReplaySubject(1);
 
   const publish = () => {
     eventsStream.onNext({
@@ -10,11 +10,9 @@ export default function location(events){
     })
   }
 
-  Rx.Observable.fromEvent(window, 'popstate').forEach(()=>{
-    publish()
-  })
+  Rx.Observable.fromEvent(window, 'popstate').forEach(publish)
 
-  let setLocation = (path, params, replace) => {
+  const setLocation = (path, params, replace) => {
     var href = hrefFor(path, params);
     if (replace){
       history.replaceState(null, null, href);

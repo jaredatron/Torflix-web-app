@@ -8,7 +8,7 @@ const State = (events, spec) => {
   for (var prop in spec){
     spec[prop] = spec[prop](events)
   }
-  return combineLatestAsObject(spec)
+  return combineLatestAsObject(spec).share()
 }
 
 export default State

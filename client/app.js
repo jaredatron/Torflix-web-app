@@ -2,6 +2,7 @@ import Rx from 'rx-dom'
 import renderer from './renderer.jsx';
 import events from './events';
 import State from './state';
+import LoginPage from './renderer/pages/login_page.jsx'
 
 const App = {
   renderer: renderer,
@@ -14,8 +15,9 @@ const App = {
 
   start(DOMNode){
     App.DOMNode = DOMNode
+    App.state.forEach( state => App.setState(state) )
     App.state.observeOn(Rx.Scheduler.requestAnimationFrame).subscribe(
-      state => { App.setState(state) },
+      state => { App.render() },
       error => {
         console.warn('App Render Error')
         console.error(error)
@@ -28,16 +30,35 @@ const App = {
   },
 
   setState(state){
+    console.info('App.setState', state)
     App._state = state
-    App._render(state)
+
+    const Page = state.auth.loggedIn ? state.route.page : LoginPage
+
+    if (!(App.page instanceof Page)){
+      if (App.page) App.page.onExit(state)
+      App.page = new Page
+      App.page.emit = App.emit
+      App.page.onEnter(state)
+    }
+    App.page.onStateChange(state)
   },
 
-  _render(state){
-    const {instance, page} = renderer.render(App.DOMNode, App.emit, state);
-    App.instance = instance
-    App.page = page
+  render(){
+    const state = App._state
+    console.info('App.render', state)
+    App.page.beforeRender(state)
+    App.instance = renderer.render(App.DOMNode, App.emit, App.page, state);
+    App.page.afterRender(state)
   }
 }
+
+// FOR DEBUGGING
+App.events.subscribe(event => {
+  console.log('EVENT', event)
+})
+// /FOR DEBUGGING
+
 
 // import keypress  from './resources/keypress'
 
@@ -71,14 +92,5 @@ window.App = App;
 import putio from './putio'
 App.putio = putio
 
-App.state.subscribe(
-  state => {
-    // console.log("STATE:", state)
-  }
-)
 
-App.events.subscribe(
-  event => {
-    console.log('EVENT', event)
-  }
-)
+

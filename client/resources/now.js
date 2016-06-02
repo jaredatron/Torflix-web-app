@@ -1,11 +1,10 @@
 import Rx from 'rx-dom'
 
 export default function now(events){
-  const state = Rx.Observable.interval(1000)
-    .timeInterval()
-    .map(()=> new Date)
+  const stream = new Rx.ReplaySubject(1)
+  stream.onNext()
 
-  // events.subscribe()
+  // Rx.Observable.interval(1000).timeInterval().forEach( () => stream.onNext() )
 
-  return state
+  return stream.map(()=> new Date)
 }

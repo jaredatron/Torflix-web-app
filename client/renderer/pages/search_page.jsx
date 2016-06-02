@@ -6,7 +6,7 @@ import SearchResults from '../components/search_results.jsx'
 
 export default class SearchPage extends Page {
 
-  beforeRender(props){
+  onStateChange(props){
     const query = props.route.params.query
     console.info('SearchPage#beforeRender', this, query)
     if (this.query != query){
