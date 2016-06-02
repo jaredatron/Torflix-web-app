@@ -1,5 +1,4 @@
 import Rx from 'rx-dom'
-import putio from '../putio'
 import Torrents from '../torrents'
 
 export default function(events){

@@ -20,7 +20,7 @@ export default function(events){
   }
 
   const reloadTransfers = () => {
-    putio.transfers().subscribe( transfers => {
+    putio.getTransfers().subscribe( transfers => {
       console.log('transfers loaded', transfers);
       state.transfers = transfers
       state.loaded = true

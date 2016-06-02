@@ -15,8 +15,8 @@ const App = {
 
   start(DOMNode){
     App.DOMNode = DOMNode
-    App.state.forEach( state => App.setState(state) )
-    App.state.observeOn(Rx.Scheduler.requestAnimationFrame).subscribe(
+    this.sub1 = App.state.forEach( state => App.setState(state) )
+    this.sub2 = App.state.observeOn(Rx.Scheduler.requestAnimationFrame).subscribe(
       state => { App.render() },
       error => {
         console.warn('App Render Error')
@@ -27,6 +27,11 @@ const App = {
         throw new Error('state stream should never complete');
       },
     );
+  },
+
+  stop(){
+    this.sub1 && this.sub1.dispose()
+    this.sub2 && this.sub2.dispose()
   },
 
   setState(state){
@@ -67,16 +72,18 @@ import now       from './resources/now'
 import route     from './resources/route'
 import auth      from './resources/auth'
 import transfers from './resources/transfers'
+import files from './resources/files'
 import search    from './resources/search'
 import torrentDownload from './resources/torrent_download'
 
 App.state = new State(App.events, {
-  now: now,
-  route: route,
-  auth: auth,
-  transfers: transfers,
-  search: search,
-  torrentDownload: torrentDownload,
+  now,
+  route,
+  auth,
+  transfers,
+  files,
+  search,
+  torrentDownload,
 })
 
 // Rx.Observable.fromEvent(window, 'keydown').subscribe(App.emit)

@@ -41,7 +41,7 @@ export default function(events){
   }
 
   const loadAccountInfo = () => {
-    putio.accountInfo().subscribe(
+    putio.getAccountInfo().subscribe(
       creds => {
         Object.assign(state,creds)
         state.loading = false
