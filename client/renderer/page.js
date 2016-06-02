@@ -1,10 +1,18 @@
 export default class Page {
 
-  onEnter(){
+  onEnter(props){
     console.log('Page#onEnter', this)
   }
 
-  onExit(){
+  beforeRender(props){
+    console.log('Page#beforeRender', this)
+  }
+
+  afterRender(props){
+    console.log('Page#afterRender', this)
+  }
+
+  onExit(props){
     console.log('Page#onExit', this)
   }
 

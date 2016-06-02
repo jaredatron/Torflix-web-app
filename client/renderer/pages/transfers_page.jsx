@@ -1,21 +1,16 @@
-import React from 'react';
-import Layout from '../components/layout.jsx';
+import React from 'react'
+import Page from '../page.js'
+import Layout from '../components/layout.jsx'
 
-export default class TransfersPage extends React.Component {
+export default class TransfersPage extends Page {
 
-  static contextTypes = {
-    emit: React.PropTypes.func.isRequired
+  onEnter(){
+    this.emit('transfers:load')
   }
 
-  componentDidMount(){
-    if (!this.props.transfers.loaded){
-      this.context.emit('transfers:load')
-    }
-  }
-
-  render() {
-    const transfers = this.props.transfers.loaded ?
-      <TransfersList transfers={this.props.transfers} /> :
+  render(props) {
+    const transfers = props.transfers.loaded ?
+      <TransfersList transfers={props.transfers} /> :
       'Loading...'
 
     return <Layout>

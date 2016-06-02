@@ -4,7 +4,7 @@ import events from './events';
 import State from './state';
 
 const App = {
-
+  renderer: renderer,
   events: events,
 
   emit: (event) => {
@@ -13,9 +13,9 @@ const App = {
   },
 
   start(DOMNode){
-    this.DOMNode = DOMNode
-    this.state.observeOn(Rx.Scheduler.requestAnimationFrame).subscribe(
-      state => { this.setState(state) },
+    App.DOMNode = DOMNode
+    App.state.observeOn(Rx.Scheduler.requestAnimationFrame).subscribe(
+      state => { App.setState(state) },
       error => {
         console.warn('App Render Error')
         console.error(error)
@@ -28,25 +28,14 @@ const App = {
   },
 
   setState(state){
-    this._state = state
-    this._render(state)
+    App._state = state
+    App._render(state)
   },
 
   _render(state){
-    let props = {
-      emit: this.emit,
-      state: state,
-    }
-    let Page = state.route.page
-    if (!this.page || !(this.page instanceof Page)){
-      if (this.page) this.page.onExit()
-      this.page = new Page
-      this.page.onEnter()
-    }
-    // this.page.beforeRender()
-    state.page = this.page
-    this.instance = renderer.render(this.DOMNode, props);
-    // this.page.afterRender()
+    const {instance, page} = renderer.render(App.DOMNode, App.emit, state);
+    App.instance = instance
+    App.page = page
   }
 }
 

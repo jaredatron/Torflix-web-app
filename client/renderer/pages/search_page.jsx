@@ -6,30 +6,31 @@ import SearchResults from '../components/search_results.jsx'
 
 export default class SearchPage extends Page {
 
-  static contextTypes = {
-    emit: React.PropTypes.func.isRequired,
+  beforeRender(props){
+    const query = props.route.params.query
+    console.info('SearchPage#beforeRender', this, query)
+    if (this.query != query){
+      this.query = query
+      this.search(query)
+    }
   }
 
   search(query){
-    this.context.emit({
+    this.emit({
       type: 'search',
       query: query,
     })
   }
 
-  componentDidMount(){
-    this.search(this.props.route.params.query)
-  }
+  // componentWillReceiveProps(props){
+  //   const queryA = this.props.route.params.query
+  //   const queryB = props.route.params.query
+  //   if (queryA !== queryB) this.search(queryB)
+  // }
 
-  componentWillReceiveProps(props){
-    const queryA = this.props.route.params.query
-    const queryB = props.route.params.query
-    if (queryA !== queryB) this.search(queryB)
-  }
-
-  render() {
-    const query = this.props.route.params.query
-    const search = this.props.search || {}
+  render(props) {
+    const query = props.route.params.query
+    const search = props.search || {}
     const searchResults = search.results ?
       <SearchResults results={search.results} /> :
       <div>Loading...</div>

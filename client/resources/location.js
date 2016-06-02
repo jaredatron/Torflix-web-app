@@ -10,7 +10,9 @@ export default function location(events){
     })
   }
 
-  Rx.Observable.fromEvent(window, 'popstate').map(publish)
+  Rx.Observable.fromEvent(window, 'popstate').forEach(()=>{
+    publish()
+  })
 
   let setLocation = (path, params, replace) => {
     var href = hrefFor(path, params);

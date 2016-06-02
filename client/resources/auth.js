@@ -6,29 +6,39 @@ export default function(events){
 
   events.subscribe( event => {
     if (event.type === 'auth:logout') {
-      putio.accessToken = null;
-      update();
+      logout()
     }
   })
 
-  let update = () => {
-    if (putio.accessToken){
-      stateStream.onNext({})
-      putio.accountInfo().subscribe(
-        creds => {
-          stateStream.onNext(creds)
-        },
-        error => {
-          console.error(error);
-          stateStream.onNext({error:error})
-        }
-      )
+  const logout = () => {
+    putio.logout()
+    publish();
+  }
 
+  const reload = () => {
+    putio.accountInfo().subscribe(
+      creds => {
+        stateStream.onNext(creds)
+      },
+      error => {
+        console.warn('Error loading auth from putio')
+        console.error(error);
+        stateStream.onNext({error: error})
+      }
+    )
+  }
+
+  const publish = () => {
+    if (putio.accessToken){
+      stateStream.onNext({loading: true})
+      reload()
     }else{
       stateStream.onNext(null)
     }
   }
 
-  update();
+
+  putio.login()
+  publish();
   return stateStream;
 }

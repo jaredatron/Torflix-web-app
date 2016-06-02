@@ -5,13 +5,31 @@ import LoginPage from './renderer/pages/login_page.jsx'
 
 require('./renderer/style/main.sass')
 
-let Renderer = {
-  render(DOMNode, props) {
-    return ReactDOM.render(React.createElement(App, props), DOMNode);
+const renderer = {
+  render(DOMNode, emit, state) {
+    const Page = state.auth ? state.route.page : LoginPage
+
+    if (!this.page || !(this.page instanceof Page)){
+      if (this.page) this.page.onExit(state)
+      this.page = new Page
+      this.page.emit = emit
+      this.page.onEnter(state)
+    }
+
+    this.page.beforeRender(state)
+    const props = {
+      emit: emit,
+      state: state,
+      page: this.page,
+    }
+    const instance = ReactDOM.render(React.createElement(App, props), DOMNode);
+    this.page.afterRender(state)
+    return { instance, page }
   }
 };
 
-export default Renderer
+export default renderer
+
 
 class App extends React.Component {
 
@@ -36,8 +54,7 @@ class App extends React.Component {
     // console.log('RENDER', this.props);
     const state = this.props.state
     if (!state) return <div>App State null!</div>
-    if (!state.auth) return <LoginPage {...state} />
-    return state.page.render(state)
+    return this.props.page.render(state)
   }
 
 }

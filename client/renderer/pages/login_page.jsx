@@ -4,8 +4,8 @@ import React from 'react'
 import Link from '../components/link.jsx'
 import putio from '../../putio'
 
-export default class TransfersPage extends Page {
-  render() {
+export default class LoginPage extends Page {
+  render(props) {
     return <div>
       <LoginButton>Login via Put.io</LoginButton>
     </div>

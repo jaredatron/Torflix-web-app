@@ -11,9 +11,16 @@ export default function(events){
     if (event.type === 'transfers:load'){
       loadTransfers()
     }
+    if (event.type === 'transfers:reload'){
+      reloadTransfers()
+    }
   })
 
   const loadTransfers = () => {
+    if (!state.loaded) reloadTransfers()
+  }
+
+  const reloadTransfers = () => {
     putio.transfers().subscribe( transfers => {
       console.log('transfers', transfers);
       state.transfers = transfers;
