@@ -34,44 +34,9 @@ const observableHttpRequest = (options) => {
 }
 
 const observableProxiedHttpRequest = (options) => {
-  console.info('PROXY REQUEST', options)
   return observableHttpRequest({
     method: 'post',
     url: ORIGIN+'/_proxy',
     body: options,
   })
 }
-//     var proxyOptions = {
-//       method: 'post',
-//       url: '/_proxy',
-//       body: JSON.stringify(options),
-//       headers: {
-//         'Content-Type': 'application/json',
-//       }
-//     }
-
-//     return HttpRequest(proxyOptions).map(proxyResponse => {
-//       console.log('AJAX PROXY RESPONSE:', proxyResponse);
-//       return JSON.parse(proxyResponse.response)
-//       // debugger
-//       // return proxyResponse;
-//     }).catch(error => {
-//       console.warn('AJAX PROXY ERROR');
-//       console.error(error);
-//       return Rx.Observable.return( error );
-//       return Rx.Observable.throw( error );
-//     })
-
-//   }else{
-//     return HttpRequest(options).map(response => {
-//       console.log('AJAX RESPONSE:', response);
-//       // debugger
-//       return response;
-//     }).catch(error => {
-//       console.warn('AJAX ERROR');
-//       console.error(error);
-//       return Rx.Observable.return( error );
-//       return Rx.Observable.throw( error );
-//     })
-//   }
-// }

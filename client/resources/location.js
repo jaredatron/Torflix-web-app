@@ -1,8 +1,16 @@
 import Rx from 'rx-dom'
 
 export default function location(events){
-  let setLocationStream = new Rx.ReplaySubject(1);
-  setLocationStream.onNext();
+  let eventsStream = new Rx.ReplaySubject(1);
+
+  const publish = () => {
+    eventsStream.onNext({
+      path:   window.location.pathname,
+      params: searchToObject(window.location.search),
+    })
+  }
+
+  Rx.Observable.fromEvent(window, 'popstate').map(publish)
 
   let setLocation = (path, params, replace) => {
     var href = hrefFor(path, params);
@@ -11,19 +19,8 @@ export default function location(events){
     }else{
       history.pushState(null, null, href);
     }
-    setLocationStream.onNext();
+    publish()
   }
-
-  let popstateStream = Rx.Observable.fromEvent(window, 'popstate');
-
-  let state = Rx.Observable.merge(
-    setLocationStream, popstateStream
-  ).map(()=>{
-    return {
-      path:   window.location.pathname,
-      params: searchToObject(window.location.search),
-    }
-  });
 
   events.subscribe(
     event => {
@@ -33,7 +30,8 @@ export default function location(events){
     }
   )
 
-  return state;
+  publish()
+  return eventsStream;
 }
 
 const locationToString = (path, params) => {

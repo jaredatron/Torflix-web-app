@@ -31,38 +31,68 @@ const TorrentSearch = {
       magnetLink: null,
     }
     return Rx.Observable.create( observer => {
-      observer.onNext(state)
+      const publish = () => { observer.onNext(state) }
 
       var getTrackersForTorrentIdSubscription = null
       var getMagnetLinkForTrackersSubscription = null
 
-      getTrackersForTorrentIdSubscription = getTrackersForTorrentId(torrentId).subscribe(
+      getTrackersForTorrentId(torrentId).subscribe(
         results => {
+          // throw new Error('ass')
           state.torrentName = results.torrentName;
           state.trackers = results.trackers;
-          observer.onNext(state)
-
-          getMagnetLinkForTrackersSubscription = getMagnetLinkForTrackers(results.trackers).subscribe(
+          publish()
+        },
+        error => {
+          throw error
+        },
+        complete => {
+          getMagnetLinkForTrackersSubscription = getMagnetLinkForTrackers(state.trackers).subscribe(
             magnetLink => {
-              state.magnetLink = magnetLink;
-              observer.onNext(state)
+              state.magnetLink = magnetLink
+              publish()
             },
             error => {
-              console.error(error)
-              state.error = error;
-              state.errorMessage = 'unable to find magnet link from trackers'
-              observer.onNext(state)
+              throw error
+            },
+            complete => {
+              console.log('getMagnetLink complete')
+              publish()
+              observer.onCompleted()
             }
           )
-        },
-
-        error => {
-          console.error(error)
-          state.error = error;
-          state.errorMessage = 'unable to find trackers'
-          observer.onNext(state)
         }
       )
+
+      // getTrackersForTorrentIdSubscription = getTrackersForTorrentId(torrentId).subscribe(
+      //   results => {
+      //     state.torrentName = results.torrentName;
+      //     state.trackers = results.trackers;
+      //     observer.onNext(state)
+
+      //     getMagnetLinkForTrackersSubscription = getMagnetLinkForTrackers(results.trackers).subscribe(
+      //       magnetLink => {
+      //         state.magnetLink = magnetLink
+      //         observer.onNext(state)
+      //         observer.onCompleted()
+      //       },
+      //       error => {
+      //         console.error(error)
+      //         state.error = error;
+      //         state.errorMessage = 'unable to find magnet link from trackers'
+      //         observer.onNext(state)
+      //       }
+      //     )
+      //   },
+      //
+      //   error => {
+      //     console.warn('error in getTrackersForTorrentId', error)
+      //     // console.error(error)
+      //     state.error = error;
+      //     state.errorMessage = 'unable to find trackers'
+      //     observer.onError(error)
+      //   }
+      // )
 
       return () => {
         console.warn('dispose called on getMagnetLink observable')
@@ -100,11 +130,10 @@ const getMagnetLinkForTrackers = (trackers) => {
     requests.forEach(request => {
       subscriptions.push(request.subscribe(
         magnetLink => {
-          console.log('magnetLink', magnetLink)
           if (magnetLink){
             subscriptions.forEach(subscription => { subscription.dispose() })
             observer.onNext(magnetLink)
-            // observer.onCompleted(magnetLink)
+            observer.onCompleted()
           }
         },
         error => {

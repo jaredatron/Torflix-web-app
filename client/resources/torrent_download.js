@@ -20,40 +20,72 @@ export default function(events){
 
   const downloadTorrent = (torrentId) => {
     if (state[torrentId]) return
-    let downloadState = state[torrentId] = {}
-    publish()
-    downloadState.querySubscription = Torrents.getMagnetLink(torrentId).subscribe(
-      update => {
-        downloadState.torrentName = update.torrentName
-        downloadState.trackers = update.trackers
-        downloadState.error = update.error
-        downloadState.errorMessage = update.errorMessage
-        downloadState.magnetLink = update.magnetLink
+    downloadTorrentStream (torrentId).subscribe(
+      downloadState => {
+        state[torrentId] = downloadState
         publish()
-
-        if (downloadState.magnetLink){
-          downloadState.addTransferSubscription = putio.addTransfer(downloadState.magnetLink).subscribe(
-            transfer => {
-              console.log('addTransfer transfer', transfer)
-              downloadState.transfer = transfer
-              publish()
-            },
-
-            error => {
-              downloadState.error = error
-              publish()
-            }
-          )
-        }
-
       },
       error => {
-        downloadState.error = error
+        console.warn('downloadTorrent Error', error)
+        state[torrentId] = {error: error}
         publish()
       },
+      complete => {
+        delete state[torrentId]
+        publish()
+      }
     )
+    publish()
   }
 
   publish()
   return stateStream;
+}
+
+
+const downloadTorrentStream = (torrentId) => {
+  return Rx.Observable.create( observer => {
+    var state = {}
+    var getMagnetLinkSubscription
+    var addTransferSubscription
+    const publish = () => { observer.onNext(state) }
+
+    getMagnetLinkSubscription = Torrents.getMagnetLink(torrentId).subscribe(
+      magnetLinkState => {
+        state.torrentName  = magnetLinkState.torrentName
+        state.trackers     = magnetLinkState.trackers
+        state.error        = magnetLinkState.error
+        state.errorMessage = magnetLinkState.errorMessage
+        state.magnetLink   = magnetLinkState.magnetLink
+        publish()
+      },
+
+      error => {
+        throw error
+      },
+
+      complete => {
+        addTransferSubscription = putio.addTransfer(state.magnetLink).subscribe(
+          transfer => {
+            console.log('addTransfer transfer', transfer)
+            state.transfer = transfer
+            publish()
+          },
+
+          error => {
+            throw error
+          },
+
+          complete => {
+            observer.onCompleted()
+          }
+        )
+      }
+    )
+
+    return () => {
+      if (getMagnetLinkSubscription) getMagnetLinkSubscription.dispose()
+      if (addTransferSubscription) addTransferSubscription.dispose()
+    }
+  })
 }

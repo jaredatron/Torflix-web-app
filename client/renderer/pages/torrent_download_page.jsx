@@ -37,6 +37,7 @@ export default class TorrentDownloadPage extends React.Component {
     // console.info('downloadState', downloadState)
     const torrentName = downloadState.torrentName || torrentId
     const stateDescription = (
+      downloadState.error ? 'ERROR '+downloadState.error :
       downloadState.magnetLink ? 'Adding magnet link to Put.io' :
       downloadState.trackers ? 'Searching for magnet link' :
       'Searching for trackers'

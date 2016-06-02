@@ -2,9 +2,7 @@ import Rx from 'rx-dom'
 import putio from '../putio'
 
 export default function(events){
-  let state = {};
   let stateStream = new Rx.ReplaySubject(1);
-
 
   events.subscribe( event => {
     if (event.type === 'auth:logout') {
@@ -18,7 +16,6 @@ export default function(events){
       stateStream.onNext({})
       putio.accountInfo().subscribe(
         creds => {
-          console.log('???', creds)
           stateStream.onNext(creds)
         },
         error => {

@@ -9,8 +9,6 @@ if (matches){
   accessToken = localStorage['putio.access_token']
 }
 
-
-
 const putio = new Putio({
   clientId:    PUTIO_CLIENT_ID,
   secret:      PUTIO_APPLICATION_SECRET,
