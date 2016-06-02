@@ -14,6 +14,17 @@ export default class TorrentDownloadPage extends Page {
         type: 'download-torrent',
         torrentId: torrentId,
       })
+    }else{
+      const downloadState = props.torrentDownload[torrentId] || {}
+      if (downloadState.complete){
+        this.emit({
+          type: 'transfers:reload'
+        })
+        this.emit({
+          type: 'changeLocation',
+          path: '/transfers',
+        })
+      }
     }
   }
 

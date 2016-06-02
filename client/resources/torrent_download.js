@@ -31,7 +31,7 @@ export default function(events){
         publish()
       },
       complete => {
-        delete state[torrentId]
+        state[torrentId] = {complete: true}
         publish()
       }
     )

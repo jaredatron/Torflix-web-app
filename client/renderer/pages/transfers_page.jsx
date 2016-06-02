@@ -5,7 +5,11 @@ import Layout from '../components/layout.jsx'
 export default class TransfersPage extends Page {
 
   onEnter(){
-    this.emit('transfers:load')
+    this.emit('transfers:startPolling')
+  }
+
+  onExit(){
+    this.emit('transfers:stopPolling')
   }
 
   render(props) {
