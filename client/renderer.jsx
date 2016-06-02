@@ -37,7 +37,7 @@ class App extends React.Component {
     const state = this.props.state
     if (!state) return <div>App State null!</div>
     if (!state.auth) return <LoginPage {...state} />
-    return <state.route.page {...state} />
+    return state.page.render(state)
   }
 
 }

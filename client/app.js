@@ -13,26 +13,41 @@ const App = {
   },
 
   start(DOMNode){
+    this.DOMNode = DOMNode
     this.state.observeOn(Rx.Scheduler.requestAnimationFrame).subscribe(
-      state => {
-        this._state = state
-        let props = {
-          emit: this.emit,
-          state: state,
-        }
-        this.instance = renderer.render(DOMNode, props);
-        // this.instance = ReactDOM.render(React.createElement(App, props), DOMNode);
-      },
+      state => { this.setState(state) },
       error => {
-        console.warn('App Render Error');
-        console.error(error);
+        console.warn('App Render Error')
+        console.error(error)
+        throw error
       },
-      () => {
+      complete => {
         throw new Error('state stream should never complete');
       },
     );
-
   },
+
+  setState(state){
+    this._state = state
+    this._render(state)
+  },
+
+  _render(state){
+    let props = {
+      emit: this.emit,
+      state: state,
+    }
+    let Page = state.route.page
+    if (!this.page || !(this.page instanceof Page)){
+      if (this.page) this.page.onExit()
+      this.page = new Page
+      this.page.onEnter()
+    }
+    // this.page.beforeRender()
+    state.page = this.page
+    this.instance = renderer.render(this.DOMNode, props);
+    // this.page.afterRender()
+  }
 }
 
 // import keypress  from './resources/keypress'

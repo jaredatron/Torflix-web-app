@@ -1,9 +1,10 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import Page from '../page.js'
 import Layout from '../components/layout.jsx'
 import SearchResults from '../components/search_results.jsx'
 
-export default class SearchPage extends React.Component {
+export default class SearchPage extends Page {
 
   static contextTypes = {
     emit: React.PropTypes.func.isRequired,

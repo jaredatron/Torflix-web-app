@@ -1,14 +1,10 @@
-import React from 'react';
-import Layout from '../components/layout.jsx';
-import Link from '../components/link.jsx';
+import Page from '../page.js'
+import Layout from '../components/layout.jsx'
+import React from 'react'
+import Link from '../components/link.jsx'
 import putio from '../../putio'
 
-export default class TransfersPage extends React.Component {
-
-  static contextTypes = {
-    emit: React.PropTypes.func.isRequired
-  }
-
+export default class TransfersPage extends Page {
   render() {
     return <div>
       <LoginButton>Login via Put.io</LoginButton>

@@ -1,8 +1,9 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom'
+import Page from '../page.js'
 import Layout from '../components/layout.jsx';
 
-export default class HomePage extends React.Component {
+export default class HomePage extends Page {
 
   render() {
     return <Layout>
