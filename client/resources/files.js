@@ -28,6 +28,7 @@ export default function(events){
       file => {
         console.log('file loaded', file);
         state[fileId] = file
+        if (file.parent_id !== 0) loadFile(file.parent_id)
         if (file.isDirectory && !file.directoryContentsLoaded && !file.loadingDirectoryContents){
           loadDirectoryContents(fileId)
         }
@@ -36,7 +37,14 @@ export default function(events){
       },
 
       error => {
-        state[fileId] = {error: error}
+        let errorMessage = error.message
+        if (error.response && error.response.status === 404){
+          errorMessage = 'File Not Found'
+        }
+        state[fileId] = {
+          error: error,
+          errorMessage: errorMessage,
+        }
         publish()
       }
     )

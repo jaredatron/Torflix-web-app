@@ -39,16 +39,25 @@ export default class FilesPage extends Page {
 
     const content = (
       file.loading ? 'Loading...' :
-      file.error ? `Error: ${file.error}` :
+      file.errorMessage ? <h1>Error: {file.errorMessage}</h1> :
       file.isDirectory ? <DirectoryContents files={files} fileId={fileId} /> :
       file.isVideo ? <VideoFile files={files} fileId={fileId} /> :
       <MiscFile files={files} fileId={fileId} />
     )
-  // ?
-    //   <FilesList files={state.files[fileId]} /> :
-    //   'Loading...'
 
-    return <Layout className="files-page">{content}</Layout>
+    const parentDirectory = files[file.parent_id]
+
+    const controls = (
+      file.id === 0 ? null :
+      file.parent_id === 0 ? <div>Back to → <Link path="/files">Your Files</Link></div> :
+      parentDirectory ? <div>Back to → <Link path={`/files/${file.parent_id}`}>{parentDirectory.name}</Link></div> :
+      <div>Back to → <Link path={`/files/${file.parent_id}`}>Parent Directory</Link></div>
+    )
+
+    return <Layout className="files-page">
+      {controls}
+      {content}
+    </Layout>
   }
 
 }
@@ -106,7 +115,23 @@ class VideoFile extends React.Component {
 
 class MiscFile extends React.Component {
   render(){
+    const files = this.props.files
+    const fileId = this.props.fileId
+    const file = files[fileId]
 
+    const properties = Object.keys(file).map( prop => {
+      return <tr key={prop}>
+        <td>{prop}</td>
+        <td>{JSON.stringify(file[prop])}</td>
+      </tr>
+    })
+
+    return <div>
+      <h1>{file.name}</h1>
+      <table>
+        <tbody>{properties}</tbody>
+      </table>
+    </div>
   }
 }
 // class File extends React.Component {
