@@ -72,7 +72,8 @@ import now       from './resources/now'
 import route     from './resources/route'
 import auth      from './resources/auth'
 import transfers from './resources/transfers'
-import files from './resources/files'
+import files     from './resources/files'
+import tvShows   from './resources/tv_shows'
 import search    from './resources/search'
 import torrentDownload from './resources/torrent_download'
 
@@ -82,6 +83,7 @@ App.state = new State(App.events, {
   auth,
   transfers,
   files,
+  tvShows,
   search,
   torrentDownload,
 })

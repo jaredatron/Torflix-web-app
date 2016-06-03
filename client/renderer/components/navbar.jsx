@@ -15,6 +15,7 @@ export default class Navbar extends React.Component {
       <Link path="/"         >Torflix</Link>
       <Link path="/transfers">Transfers</Link>
       <Link path="/files"    >Files</Link>
+      <Link path="/tv-shows" >TV Shows</Link>
       <div className="grow" />
       <div>{renderCount+''}</div>
       <div><SearchInput autoFocus /></div>
