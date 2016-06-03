@@ -45,23 +45,33 @@ export default class FilesPage extends Page {
       <MiscFile files={files} fileId={fileId} />
     )
 
-    const parentDirectory = files[file.parent_id]
 
-    const controls = (
-      file.id === 0 ? null :
-      file.parent_id === 0 ? <div>Back to → <Link path="/files">Your Files</Link></div> :
-      parentDirectory ? <div>Back to → <Link path={`/files/${file.parent_id}`}>{parentDirectory.name}</Link></div> :
-      <div>Back to → <Link path={`/files/${file.parent_id}`}>Parent Directory</Link></div>
-    )
 
     return <Layout className="files-page">
-      {controls}
+      <Breadcrum files={files} fileId={fileId} />
       {content}
     </Layout>
   }
 
 }
 
+class Breadcrum extends React.Component {
+  render(){
+    const fileId = this.props.fileId
+    const files = this.props.files
+    const file = files[fileId]
+
+    let parentIds = getParentIds(files, file)
+
+    const links = parentIds.map( parentId => {
+      let parent = files[parentId]
+      let parentName = parent ? parent.name : 'Parent Directory'
+      return <Link key={parentId} path={`/files/${parentId}`}>{parentName}</Link>
+    })
+
+    return <div className="inline-list separated-list">{links}</div>
+  }
+}
 class DirectoryContents extends React.Component {
   render(){
     const files = this.props.files
@@ -134,48 +144,12 @@ class MiscFile extends React.Component {
     </div>
   }
 }
-// class File extends React.Component {
-//   static contextTypes = {
-//     state: React.PropTypes.object.isRequired
-//   }
 
-//   render(){
-//     const state = this.context.state
-//     const fileId = this.props.fileId
-//     const file = state.files[fileId]
-
-//     if (file.isDirectory) return <Directory fileId={fileId} />
-//     return <div>
-//       <div>File: {fileId} {file.name}</div>
-//       <div>{JSON.stringify(file, null, '  ')}</div>
-//     </div>
-//   }
-// }
-
-
-// class Directory extends React.Component {
-//   static contextTypes = {
-//     state: React.PropTypes.object.isRequired
-//   }
-//   render(){
-//     const state = this.context.state
-//     const fileId = this.props.fileId
-//     const directory = state.files[fileId]
-//     const files = directory.directoryContentsLoaded ?
-//       directory.fileIds.map(fileId => <DirectoryMember key={fileId} fileId={fileId} />) :
-//       'loading...'
-//     return <div className="files-directory">
-//       <h1>{directory.name}</h1>
-//       <div>{files}</div>
-//     </div>
-//   }
-// }
-
-
-// class FilesListItem extends React.Component {
-//   render(){
-//     return <tr>
-//       <td>{this.props.file.name}</td>
-//     </tr>
-//   }
-// }
+const getParentIds = (files, file) => {
+  let parentId = file.parent_id
+  if (typeof parentId !== 'number') return []
+  let parent = files[parentId]
+  let parentIds = [parentId]
+  if (parent) parentIds = getParentIds(files, parent).concat(parentIds)
+  return parentIds
+}

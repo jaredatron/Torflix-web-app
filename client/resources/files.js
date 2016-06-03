@@ -22,13 +22,13 @@ export default function(events){
 
   const reloadFile = (fileId) => {
     if (state[fileId] && state[fileId].loading) return
-    state[fileId] = {loading: true}
+    state[fileId] = {id: fileId, loading: true}
     publish()
     putio.getFile(fileId).subscribe(
       file => {
         console.log('file loaded', file);
         state[fileId] = file
-        if (file.parent_id !== 0) loadFile(file.parent_id)
+        loadFile(file.parent_id)
         if (file.isDirectory && !file.directoryContentsLoaded && !file.loadingDirectoryContents){
           loadDirectoryContents(fileId)
         }
