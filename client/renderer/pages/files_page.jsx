@@ -104,6 +104,11 @@ class VideoFile extends React.Component {
   }
 }
 
+class MiscFile extends React.Component {
+  render(){
+
+  }
+}
 // class File extends React.Component {
 //   static contextTypes = {
 //     state: React.PropTypes.object.isRequired

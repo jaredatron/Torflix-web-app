@@ -10,13 +10,12 @@ export default class Navbar extends React.Component {
   }
 
   render() {
-    const { auth, now, renderCount } = this.context.state
+    const { auth, renderCount } = this.context.state
     return <div className="navbar theme-dark columns">
       <Link path="/"         >Torflix</Link>
       <Link path="/transfers">Transfers</Link>
       <Link path="/files"    >Files</Link>
       <div className="grow" />
-      <div>{now+''}</div>
       <div>{renderCount+''}</div>
       <div><SearchInput autoFocus /></div>
       <LogoutLink tabIndex="-1">Logout</LogoutLink>

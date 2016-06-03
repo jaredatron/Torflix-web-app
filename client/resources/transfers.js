@@ -2,7 +2,7 @@ import Rx from 'rx-dom'
 import putio from '../putio'
 
 export default function(events){
-  const POLLING_FREQUENCY = 1000 // miliseconds
+  const POLLING_FREQUENCY = 3000 // miliseconds
 
   let state = {}
   let stateStream = new Rx.ReplaySubject(1)
