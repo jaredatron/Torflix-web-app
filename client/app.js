@@ -35,7 +35,6 @@ const App = {
   },
 
   setState(state){
-    // console.log('App.setState', state)
     App._state = state
 
     const Page = state.auth.loggedIn ? state.route.page : LoginPage
@@ -51,7 +50,6 @@ const App = {
 
   render(){
     const state = App._state
-    // console.log('App.render', state)
     App.page.beforeRender(state)
     App.instance = renderer.render(App.DOMNode, App.emit, App.page, state);
     App.page.afterRender(state)
@@ -59,9 +57,9 @@ const App = {
 }
 
 // FOR DEBUGGING
-App.events.subscribe(event => {
-  console.log('EVENT', event.type, event)
-})
+// App.events.subscribe(event => {
+//   console.log('EVENT', event.type, event)
+// })
 // /FOR DEBUGGING
 
 

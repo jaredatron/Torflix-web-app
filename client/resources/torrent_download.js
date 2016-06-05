@@ -20,7 +20,7 @@ export default function(events){
 
   const downloadTorrent = (torrentId) => {
     if (state[torrentId]) return
-    downloadTorrentStream (torrentId).subscribe(
+    downloadTorrentStream(torrentId).subscribe(
       downloadState => {
         state[torrentId] = downloadState
         publish()
@@ -67,7 +67,6 @@ const downloadTorrentStream = (torrentId) => {
       complete => {
         addTransferSubscription = putio.addTransfer(state.magnetLink).subscribe(
           transfer => {
-            console.log('addTransfer transfer', transfer)
             state.transfer = transfer
             publish()
           },

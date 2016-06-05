@@ -25,7 +25,6 @@ export default function(events){
 
   const reloadTransfers = () => {
     putio.getTransfers().subscribe( transfers => {
-      console.log('transfers loaded', transfers);
       state.transfers = transfers
       state.loaded = true
       publish()

@@ -58,7 +58,6 @@ class Overlay extends React.Component {
   }
 
   onMouseMove() {
-    console.log('mousemove')
     this.fadeIn()
   }
 

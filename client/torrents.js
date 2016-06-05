@@ -56,7 +56,6 @@ const TorrentSearch = {
               throw error
             },
             complete => {
-              console.log('getMagnetLink complete')
               publish()
               observer.onCompleted()
             }
@@ -64,38 +63,7 @@ const TorrentSearch = {
         }
       )
 
-      // getTrackersForTorrentIdSubscription = getTrackersForTorrentId(torrentId).subscribe(
-      //   results => {
-      //     state.torrentName = results.torrentName;
-      //     state.trackers = results.trackers;
-      //     observer.onNext(state)
-
-      //     getMagnetLinkForTrackersSubscription = getMagnetLinkForTrackers(results.trackers).subscribe(
-      //       magnetLink => {
-      //         state.magnetLink = magnetLink
-      //         observer.onNext(state)
-      //         observer.onCompleted()
-      //       },
-      //       error => {
-      //         console.error(error)
-      //         state.error = error;
-      //         state.errorMessage = 'unable to find magnet link from trackers'
-      //         observer.onNext(state)
-      //       }
-      //     )
-      //   },
-      //
-      //   error => {
-      //     console.warn('error in getTrackersForTorrentId', error)
-      //     // console.error(error)
-      //     state.error = error;
-      //     state.errorMessage = 'unable to find trackers'
-      //     observer.onError(error)
-      //   }
-      // )
-
       return () => {
-        console.warn('dispose called on getMagnetLink observable')
         if (getTrackersForTorrentIdSubscription) getTrackersForTorrentIdSubscription.dispose()
         if (getMagnetLinkForTrackersSubscription) getMagnetLinkForTrackersSubscription.dispose()
       }
@@ -140,9 +108,6 @@ const getMagnetLinkForTrackers = (trackers) => {
           console.warn('error parsing magnet link from tracker')
           console.error(error)
         },
-        () => {
-          console.log('REQ complete')
-        }
       ))
     })
   })
@@ -233,7 +198,6 @@ const parseSearchResults = html => {
     }catch(error){
       console.warn('failed to parse torrentz.com result html', node)
       console.error(error)
-      debugger
     }
   })
   return results

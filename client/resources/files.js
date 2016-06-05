@@ -26,7 +26,6 @@ export default function(events){
     publish()
     putio.getFile(fileId).subscribe(
       file => {
-        console.log('file loaded', file);
         state[fileId] = file
         if (typeof file.parent_id === 'number') loadFile(file.parent_id)
         if (file.isDirectory && !file.directoryContentsLoaded && !file.loadingDirectoryContents){

@@ -32,7 +32,6 @@ export default class TorrentDownloadPage extends Page {
   render(props) {
     const torrentId = this.torrentId
     const downloadState = props.torrentDownload[torrentId] || {}
-    // console.info('downloadState', downloadState)
     const torrentName = downloadState.torrentName || torrentId
     const stateDescription = (
       downloadState.error ? 'ERROR '+downloadState.error :

@@ -8,12 +8,12 @@ const COMPLETE_URL = /^https?:\/\//;
 export default function(options){
   options.method = options.method || 'get'
   options.url = options.url.toString()
-  console.log('REQUEST ->', options.method, options.url, {options})
+  // console.log('REQUEST ->', options.method, options.url, {options})
   const request = options.serverProxy ?
     observableProxiedHttpRequest(options) :
     observableHttpRequest(options)
   return request.doOnCompleted(()=>{
-    console.log('REQUEST <-', options.method, options.url, {options})
+    // console.log('REQUEST <-', options.method, options.url, {options})
   })
 }
 
