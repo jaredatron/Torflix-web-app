@@ -2,8 +2,6 @@ import Rx from 'rx-dom'
 import React from 'react'
 import ReactDOM from 'react-dom'
 
-require('./renderer/style/main.sass')
-
 const renderer = {
   renderCount: 0,
 

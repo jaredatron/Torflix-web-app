@@ -21,6 +21,9 @@
     "body-parser": "^1.15.1",
     "css-loader": "^0.23.1",
     "express": "^4.13.4",
+    "extract-loader": "0.0.2",
+    "file-loader": "^0.8.5",
+    "font-awesome": "^4.6.3",
     "json-loader": "^0.5.4",
     "node-sass": "^3.7.0",
     "normalize.css": "^4.1.1",
@@ -33,6 +36,7 @@
     "style-loader": "^0.13.1",
     "superagent": "^2.0.0",
     "urijs": "^1.18.1",
+    "url-loader": "^0.5.7",
     "webpack": "^1.13.0"
   },
   "devDependencies": {
