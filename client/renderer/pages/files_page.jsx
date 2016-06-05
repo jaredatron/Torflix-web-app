@@ -142,7 +142,7 @@ class VideoFile extends React.Component {
       <div>
         <Link href={file.downloadUrl}>Download Video</Link>
       </div>
-      <video controls>
+      <video controls poster={file.screenshot}>
         {sources}
         Your browser does not support the video tag.
       </video>

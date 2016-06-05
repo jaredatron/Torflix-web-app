@@ -10,12 +10,25 @@ export default class Navbar extends React.Component {
   }
 
   render() {
-    const { auth, renderCount } = this.context.state
+    const { auth, renderCount, route } = this.context.state
+    const path = route.path
+    // const activeLink = getActiveLink(route.path)
+
+    const NavbarLink = (props) => {
+      const active = (
+        props.path === "/" ? path === "/" :
+        path.includes(props.path)
+      )
+      let className = active ? 'active' : ''
+      return <Link {...props} className={className}>{props.children}</Link>
+    }
+
+
     return <div className="navbar theme-dark columns">
-      <Link path="/"         >Torflix</Link>
-      <Link path="/transfers">Transfers</Link>
-      <Link path="/files"    >Files</Link>
-      <Link path="/tv-shows" >TV Shows</Link>
+      <NavbarLink path="/"          >Torflix</NavbarLink>
+      <NavbarLink path="/transfers" >Transfers</NavbarLink>
+      <NavbarLink path="/files"     >Files</NavbarLink>
+      <NavbarLink path="/tv-shows"  >TV Shows</NavbarLink>
       <div className="grow" />
       <div>{renderCount+''}</div>
       <div><SearchInput autoFocus /></div>
@@ -23,4 +36,10 @@ export default class Navbar extends React.Component {
       <div>{auth.username}</div>
     </div>
   }
+}
+
+
+const getActiveLink = (path) => {
+  const matches = path.match(/^\/([^\/]+)/)
+  if (matches) return matches[0]
 }
