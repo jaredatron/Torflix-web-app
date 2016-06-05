@@ -30,7 +30,6 @@ export default class Navbar extends React.Component {
       <NavbarLink path="/files"     >Files</NavbarLink>
       <NavbarLink path="/tv-shows"  >TV Shows</NavbarLink>
       <div className="grow" />
-      <div>{renderCount+''}</div>
       <div><SearchInput autoFocus /></div>
       <LogoutLink tabIndex="-1">Logout</LogoutLink>
       <div>{auth.username}</div>

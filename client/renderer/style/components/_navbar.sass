@@ -6,12 +6,59 @@
   justify-content: space-between
   > *
     white-space: nowrap
-    padding: 1em 1%
-  > img
-    padding: 2px
+
   .link
     &, &:hover, &:active
       text-decoration: none
-    &.active
+
+  /*==========  Mobile First Method  ==========*/
+
+  /* Custom, iPhone Retina */
+  @media only screen and (min-width : 320px)
+    display: flex
+    flex-wrap: nowrap
+    justify-content: flex-start
+    align-items: stretch
+    align-content: flex-start
+    flex-direction: column-reverse
+
+    > *
+      padding: 2px
+
+    .grow
+      display: none
+
+    input
+      width: 100%
+
+    .link.active
+      /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#7db9e8+0,7db9e8+100&0+0,1+100 */
+      background: -moz-linear-gradient(left, rgba(125,185,232,0) 0%, rgba(125,185,232,1) 100%)
+      /* FF3.6-15 */
+      background: -webkit-linear-gradient(left, rgba(125,185,232,0) 0%,rgba(125,185,232,1) 100%)
+      /* Chrome10-25,Safari5.1-6 */
+      background: linear-gradient(left right, rgba(125,185,232,0) 0%,rgba(125,185,232,1) 100%)
+      /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+      filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#007db9e8', endColorstr='#7db9e8',GradientType=0 )
+      /* IE6-9 */
+
+  /* Extra Small Devices, Phones */
+  @media only screen and (min-width : 480px)
+    > *
+      padding: 1em 1%
+    .link.active
       border-bottom: 3px solid lightblue
+
+
+  /* Small Devices, Tablets */
+  @media only screen and (min-width : 768px)
+    background-color: purple
+
+  /* Medium Devices, Desktops */
+  @media only screen and (min-width : 992px)
+    background-color: blue
+
+  /* Large Devices, Wide Screens */
+  @media only screen and (min-width : 1200px)
+    background-color: green
 
