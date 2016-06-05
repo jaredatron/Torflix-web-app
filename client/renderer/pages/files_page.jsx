@@ -110,31 +110,37 @@ const DirectoryMember = ({file}) => {
     <DirectoryMemberIcon file={file} />
     <Link className="files-title" path={`/files/${file.id}`}>{file.name}</Link>
     <div className="grow"></div>
-    <DownloadLink file={file} />
-    <PlayLink file={file}>P</PlayLink>
-    <PutioLink file={file} />
+    <DownloadLink file={file}>
+      <i className="icon icon-download"/>
+    </DownloadLink>
+    <PlayLink file={file}>
+      <i className="icon icon-play"/>
+    </PlayLink>
+    <PutioLink file={file}>
+      <i className="icon icon-external-link-square"/>
+    </PutioLink>
   </div>
 }
 
 const DirectoryMemberIcon = ({file}) => {
   return (
-    file.isDirectory ? <div>D</div> :
-    file.isVideo ? <div>F</div> :
-    <div>?</div>
+    file.isDirectory ? <div className="icon icon-folder" /> :
+    file.isVideo ? <div className="icon icon-video-camera" /> :
+    <div className="icon icon-file" />
   )
 }
 
-const DownloadLink = ({file}) => {
-  let downloadUrl = file.downloadUrl
+const DownloadLink = (props) => {
+  let downloadUrl = props.file.downloadUrl
   return downloadUrl ?
-    <Link tabIndex="-1" href={downloadUrl}>D</Link> :
+    <Link tabIndex="-1" href={downloadUrl}>{props.children}</Link> :
     null
 }
 
 const PutioLink = (props) => {
   let putioUrl = props.file.putioUrl
   return putioUrl ?
-    <Link tabIndex="-1" href={putioUrl}>P</Link> :
+    <Link tabIndex="-1" href={putioUrl}>{props.children}</Link> :
     null
 }
 
