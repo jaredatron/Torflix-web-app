@@ -14,7 +14,19 @@ export default class FilesPage extends Page {
   }
 
   onStateChange(state){
-    const fileId = state.route.params.fileId || 0
+    let fileId = state.route.params.fileId
+
+    if (fileId === '0') {
+      this.emit({
+        type: 'changeLocation',
+        path: '/files',
+        replace: true,
+      })
+      return
+    }
+
+    fileId = fileId || '0'
+
     const file = state.files[fileId]
     if (!file){
       this.emit({
@@ -68,7 +80,8 @@ class Breadcrum extends React.Component {
     const links = parentIds.map( parentId => {
       let parent = files[parentId]
       let parentName = parent ? parent.name : 'Parent Directory'
-      return <Link key={parentId} path={`/files/${parentId}`}>{parentName}</Link>
+      let path = parentId === 0 ? '/files' : `/files/${parentId}`
+      return <Link key={parentId} path={path}>{parentName}</Link>
     })
 
     return <div className="inline-list separated-list">{links}</div>

@@ -43,7 +43,6 @@ class Overlay extends React.Component {
     this.fadeIn = this.fadeIn.bind(this)
   }
 
-
   componentDidMount(){
     clearTimeout(this.timeout)
     this.timeout = setTimeout(this.fadeOut, 3500)

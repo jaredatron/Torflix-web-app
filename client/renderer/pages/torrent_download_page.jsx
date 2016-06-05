@@ -23,6 +23,7 @@ export default class TorrentDownloadPage extends Page {
         this.emit({
           type: 'changeLocation',
           path: '/transfers',
+          replace: true,
         })
       }
     }
