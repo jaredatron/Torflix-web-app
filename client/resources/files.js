@@ -28,7 +28,7 @@ export default function(events){
       file => {
         console.log('file loaded', file);
         state[fileId] = file
-        if (file.parent_id) loadFile(file.parent_id)
+        if (typeof file.parent_id === 'number') loadFile(file.parent_id)
         if (file.isDirectory && !file.directoryContentsLoaded && !file.loadingDirectoryContents){
           loadDirectoryContents(fileId)
         }

@@ -42,6 +42,8 @@ export default class FilesPage extends Page {
       file.errorMessage ? <h1>Error: {file.errorMessage}</h1> :
       file.isDirectory ? <DirectoryContents files={files} fileId={fileId} /> :
       file.isVideo ? <VideoFile files={files} fileId={fileId} /> :
+      file.isImage ? <img src={file.downloadUrl} /> :
+      // file.isText ? <iframe src={file.downloadUrl} /> :
       <MiscFile files={files} fileId={fileId} />
     )
 
