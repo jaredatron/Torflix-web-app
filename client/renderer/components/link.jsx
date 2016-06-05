@@ -42,15 +42,16 @@ export default class Link extends React.Component {
     // let href = this.props.href || "";
     // let className = "PageLink "+(this.props.className || "")
 
-    let props = {}
-    props.href = this.props.href || this.props.path || "javascript:void(null);";
-    props.className = this.props.className || "";
-    props.className = `link ${this.props.className}`;
-    props.tabIndex = this.props.tabIndex;
-    props.onClick = this.onClick;
+    let href = this.props.href || this.props.path || "javascript:void(null);"
+    let className = 'link '+(this.props.className || '')
+    let onClick = this.onClick
 
     // return <a href={href} className={className} onClick={this.onClick}>
-    return <a {...props}>{this.props.children}</a>
+    return <a {...this.props}
+        href={href}
+        className={className}
+        onClick={onClick}
+      >{this.props.children}</a>
   }
 
 }

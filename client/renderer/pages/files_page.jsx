@@ -2,6 +2,7 @@ import React from 'react'
 import Page from '../page.js'
 import Layout from '../components/layout.jsx'
 import Link from '../components/link.jsx'
+import moment from 'moment'
 
 export default class FilesPage extends Page {
 
@@ -109,14 +110,15 @@ const DirectoryMember = ({file}) => {
   return <div className={className}>
     <DirectoryMemberIcon file={file} />
     <Link className="files-title" path={`/files/${file.id}`}>{file.name}</Link>
+    <small>{moment(file.created_at).fromNow().toString()}</small>
     <div className="grow"></div>
-    <DownloadLink file={file}>
+    <DownloadLink file={file} tabIndex="-1">
       <i className="icon icon-download"/>
     </DownloadLink>
-    <PlayLink file={file}>
+    <PlayLink file={file} tabIndex="-1">
       <i className="icon icon-play"/>
     </PlayLink>
-    <PutioLink file={file}>
+    <PutioLink file={file} tabIndex="-1">
       <i className="icon icon-external-link-square"/>
     </PutioLink>
   </div>
@@ -133,20 +135,20 @@ const DirectoryMemberIcon = ({file}) => {
 const DownloadLink = (props) => {
   let downloadUrl = props.file.downloadUrl
   return downloadUrl ?
-    <Link tabIndex="-1" href={downloadUrl}>{props.children}</Link> :
+    <Link {...props} href={downloadUrl}>{props.children}</Link> :
     null
 }
 
 const PutioLink = (props) => {
   let putioUrl = props.file.putioUrl
   return putioUrl ?
-    <Link tabIndex="-1" href={putioUrl}>{props.children}</Link> :
+    <Link {...props} href={putioUrl}>{props.children}</Link> :
     null
 }
 
 const PlayLink = (props) => {
   return props.file.isVideo ?
-    <Link href={`/play/${props.file.id}`}>{props.children}</Link> :
+    <Link {...props} href={`/play/${props.file.id}`}>{props.children}</Link> :
     null
 }
 
