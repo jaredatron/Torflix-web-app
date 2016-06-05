@@ -23,7 +23,6 @@ export default function(events){
   }
 
   const update = () => {
-    publish()
     if (putio.loggedIn()){
       if (!state.loaded && !state.loading){
         loadAccountInfo()
@@ -35,9 +34,8 @@ export default function(events){
       }
     }else{
       state = {loggedIn: false}
-      publish()
-      return
     }
+    publish()
   }
 
   const loadAccountInfo = () => {
