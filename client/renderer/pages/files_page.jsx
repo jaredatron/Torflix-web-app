@@ -98,6 +98,7 @@ const DirectoryMember = ({file}) => {
     <Link className="files-title" path={`/files/${file.id}`}>{file.name}</Link>
     <div className="grow"></div>
     <DownloadLink file={file} />
+    <PlayLink file={file}>P</PlayLink>
     <PutioLink file={file} />
   </div>
 }
@@ -113,14 +114,20 @@ const DirectoryMemberIcon = ({file}) => {
 const DownloadLink = ({file}) => {
   let downloadUrl = file.downloadUrl
   return downloadUrl ?
-    <Link tabIndex="-1" className="download-link" href={downloadUrl}>D</Link> :
+    <Link tabIndex="-1" href={downloadUrl}>D</Link> :
     null
 }
 
 const PutioLink = (props) => {
   let putioUrl = props.file.putioUrl
   return putioUrl ?
-    <Link tabIndex="-1" className="putio-link" href={putioUrl}>P</Link> :
+    <Link tabIndex="-1" href={putioUrl}>P</Link> :
+    null
+}
+
+const PlayLink = (props) => {
+  return props.file.isVideo ?
+    <Link href={`/play/${props.file.id}`}>{props.children}</Link> :
     null
 }
 
@@ -130,22 +137,12 @@ class VideoFile extends React.Component {
     const fileId = this.props.fileId
     const file = files[fileId]
 
-    let sources = [
-      <source key="streamUrl" src={file.streamUrl} type={`video/${file.extension}`} />
-    ]
-    if (file.is_mp4_available) sources.push(
-      <source key="mp4StreamUrl" src={file.mp4StreamUrl} type="video/mp4" />
-    )
-
     return <div className="files-video-file">
       <h1>{file.name}</h1>
-      <div>
-        <Link href={file.downloadUrl}>Download Video</Link>
+      <div className="inline-list separated-list">
+        <Link href={file.downloadUrl}>Download</Link>
+        <PlayLink file={file}>Play</PlayLink>
       </div>
-      <video controls poster={file.screenshot}>
-        {sources}
-        Your browser does not support the video tag.
-      </video>
     </div>
   }
 }

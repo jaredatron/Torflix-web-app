@@ -32,6 +32,9 @@ a[href]
   &, &:hover
   text-decoration: none
 
+video
+  background-color: black
+
 // Flexbox
 
 .layer
@@ -42,6 +45,10 @@ a[href]
   right: 0
   height: 100%
   width: 100%
+
+.transparent-overlay
+  background-color: transparent
+  pointer-events: none
 
 .columns, .rows
   display: flex
@@ -65,7 +72,7 @@ a[href]
 // Themes
 
 .theme-dark
-  background-color: black
+  // background-color: black
   color: white
 
   .link
@@ -91,7 +98,11 @@ a[href]
   margin-right: 0.25em
 
 
-
+.play-page
+  .transparent-overlay
+    opacity: 1
+    &.invisible
+      opacity: 0
 
 @import "./components/navbar"
 @import "./components/search_input"
