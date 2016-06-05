@@ -1,6 +1,7 @@
 var path = require('path');
 var webpack = require('webpack');
 var ENV = require('./config/environment')
+let ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 var constants = new webpack.DefinePlugin({
   PUTIO_APPLICATION_SECRET: JSON.stringify(ENV.PUTIO_APPLICATION_SECRET),
@@ -8,10 +9,6 @@ var constants = new webpack.DefinePlugin({
   PUTIO_OAUTH_TOKEN:        JSON.stringify(ENV.PUTIO_OAUTH_TOKEN),
   PUTIO_REDIRECT_URI:       JSON.stringify(ENV.PUTIO_REDIRECT_URI),
 })
-
-let common  = {
-
-}
 
 
 module.exports = [
@@ -26,16 +23,20 @@ module.exports = [
       filename: 'style.css'
     },
     // devtool: "source-map",
+    plugins: [
+      new ExtractTextPlugin("style.css")
+    ],
     module: {
       loaders: [
         {
           test: /\.sass$/,
-          loaders: ["file?name=[name].[ext]", "extract", "css", "sass"]
+          // loaders: ["css", "sass"]
+          loader: ExtractTextPlugin.extract("style", "css!sass")
         }
       ]
     },
     sassLoader: {
-      data: "$env: " + process.env.NODE_ENV + ";"
+      // data: "$env: " + process.env.NODE_ENV + ";"
     }
   },
   {
