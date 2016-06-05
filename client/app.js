@@ -35,6 +35,7 @@ const App = {
   },
 
   setState(state){
+    console.info('SET STATE')
     App._state = state
 
     const Page = state.auth.loggedIn ? state.route.page : LoginPage
@@ -46,9 +47,12 @@ const App = {
       App.page.onEnter(state)
     }
     App.page.onStateChange(state)
+
+    if (!App.instance) App.render() // HACK TODO: FIX
   },
 
   render(){
+    console.info('RENDER')
     const state = App._state
     App.page.beforeRender(state)
     App.instance = renderer.render(App.DOMNode, App.emit, App.page, state);
