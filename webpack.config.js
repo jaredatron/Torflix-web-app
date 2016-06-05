@@ -1,7 +1,7 @@
 var path = require('path');
 var webpack = require('webpack');
-var ENV = require('./config/environment')
-let ExtractTextPlugin = require('extract-text-webpack-plugin');
+var ENV = require('./config/environment');
+var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 var constants = new webpack.DefinePlugin({
   PUTIO_APPLICATION_SECRET: JSON.stringify(ENV.PUTIO_APPLICATION_SECRET),
