@@ -81,10 +81,10 @@ class Breadcrum extends React.Component {
       let parent = files[parentId]
       let parentName = parent ? parent.name : 'Parent Directory'
       let path = parentId === 0 ? '/files' : `/files/${parentId}`
-      return <Link key={parentId} path={path}>{parentName}</Link>
+      return <div key={parentId}><Link path={path}>{parentName}</Link></div>
     })
 
-    return <div className="inline-list separated-list">{links}</div>
+    return <div className="inline-list crumb-list">{links}</div>
   }
 }
 
@@ -156,6 +156,9 @@ class VideoFile extends React.Component {
         <Link href={file.downloadUrl}>Download</Link>
         <PlayLink file={file}>Play</PlayLink>
       </div>
+      <PlayLink file={file}>
+        <img src={file.screenshot} />
+      </PlayLink>
     </div>
   }
 }

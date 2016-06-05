@@ -5,9 +5,12 @@ import Navbar from './navbar.jsx';
 export default class Layout extends React.Component {
 
   render() {
+    let contentClassName = ''
+    if (this.props.padded) contentClassName += ' layout-padded'
+
     return <div {...this.props}>
       <Navbar/>
-      {this.props.children}
+      <div className={contentClassName}>{this.props.children}</div>
     </div>
   }
 
