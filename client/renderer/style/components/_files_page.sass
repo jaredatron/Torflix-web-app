@@ -5,3 +5,27 @@
     video
       width: 100%
       background-color: black
+
+  .files-directory-member
+    padding: 2px 5px 5px 5px
+    display: flex
+    flex-wrap: nowrap
+    justify-content: flex-start
+    align-items: stretch
+    align-content: flex-start
+    flex-direction: row
+
+    background-color: $white
+    &:nth-child(odd)
+      background-color: $lightgrey
+
+
+    &.directory
+
+    .files-title
+      text-overflow: ellipsis
+      overflow: hidden
+
+    > *
+      padding: 0 5px
+

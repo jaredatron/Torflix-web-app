@@ -17,6 +17,6 @@ export default class LogoutLink extends React.Component {
   }
 
   render(){
-    return <Link onClick={this.logout}>{this.props.children}</Link>
+    return <Link {...this.props} onClick={this.logout}>{this.props.children}</Link>
   }
 }

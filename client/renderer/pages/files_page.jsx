@@ -72,6 +72,7 @@ class Breadcrum extends React.Component {
     return <div className="inline-list separated-list">{links}</div>
   }
 }
+
 class DirectoryContents extends React.Component {
   render(){
     const files = this.props.files
@@ -87,15 +88,39 @@ class DirectoryContents extends React.Component {
   }
 }
 
-class DirectoryMember extends React.Component {
-  render(){
-    const file = this.props.file
-    return <div>
-      <Link path={`/files/${file.id}`}>{file.name}</Link>
-    </div>
-  }
+const DirectoryMember = ({file}) => {
+  let className = "files-directory-member"
+  if (file.isDirectory) className += ' directory'
+  return <div className={className}>
+    <DirectoryMemberIcon file={file} />
+    <Link className="files-title" path={`/files/${file.id}`}>{file.name}</Link>
+    <div className="grow"></div>
+    <DownloadLink file={file} />
+    <PutioLink file={file} />
+  </div>
 }
 
+const DirectoryMemberIcon = ({file}) => {
+  return (
+    file.isDirectory ? <div>D</div> :
+    file.isVideo ? <div>F</div> :
+    <div>?</div>
+  )
+}
+
+const DownloadLink = ({file}) => {
+  let downloadUrl = file.downloadUrl
+  return downloadUrl ?
+    <Link tabIndex="-1" className="download-link" href={downloadUrl}>D</Link> :
+    null
+}
+
+const PutioLink = (props) => {
+  let putioUrl = props.file.putioUrl
+  return putioUrl ?
+    <Link tabIndex="-1" className="putio-link" href={putioUrl}>P</Link> :
+    null
+}
 
 class VideoFile extends React.Component {
   render(){
