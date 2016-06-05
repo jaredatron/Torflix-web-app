@@ -31,6 +31,7 @@ class TransfersList extends React.Component {
     const transfers = this.props.transfers.transfers.map((transfer) => {
       return <TransferListItem key={transfer.id} transfer={transfer} />
     })
+    transfers.reverse()
 
     return <div className="transfers-list">{transfers}</div>
   }
