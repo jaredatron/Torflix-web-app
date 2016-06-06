@@ -4,10 +4,15 @@ import Link from '../components/link.jsx'
 
 export default class SearchResults extends React.Component {
   render(){
-    const results = this.props.results.map(
-      result => <SearchResult key={result.id} result={result} />
+    let {query, results} = this.props.search
+    const content = (
+      results ?
+        results.length === 0 ?
+          <h2>No Results Found for {query}</h2> :
+        results.map(result => <SearchResult key={result.id} result={result} />) :
+      <h2>Loading...</h2>
     )
-    return <div className="search-results">{results}</div>
+    return <div className="search-results">{content}</div>
   }
 }
 

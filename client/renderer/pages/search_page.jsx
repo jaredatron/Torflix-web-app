@@ -30,9 +30,7 @@ export default class SearchPage extends Page {
   render(props) {
     const query = props.route.params.query
     const search = props.search || {}
-    const searchResults = search.results ?
-      <SearchResults results={search.results} /> :
-      <div>Loading...</div>
+    const searchResults = <SearchResults search={search}/>
     return <Layout className="search-page">
       {searchResults}
     </Layout>

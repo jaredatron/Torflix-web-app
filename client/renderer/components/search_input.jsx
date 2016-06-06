@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-export default class Navbar extends React.Component {
+export default class SearchInput extends React.Component {
 
   static contextTypes = {
     emit:  React.PropTypes.func.isRequired,
@@ -24,6 +24,7 @@ export default class Navbar extends React.Component {
   render() {
     const query = this.context.state.route.params.query
     return <input
+      ref="input"
       className="SearchInput"
       defaultValue={query}
       onKeyDown={this.onKeyDown}
