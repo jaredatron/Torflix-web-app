@@ -26,6 +26,7 @@
     "file-loader": "^0.8.5",
     "font-awesome": "^4.6.3",
     "json-loader": "^0.5.4",
+    "moment": "^2.13.0",
     "node-sass": "^3.7.0",
     "normalize.css": "^4.1.1",
     "put.io": "github:deadlyicon/put.io",
