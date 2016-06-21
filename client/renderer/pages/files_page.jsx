@@ -111,6 +111,7 @@ const DirectoryMember = ({file}) => {
     <DirectoryMemberIcon file={file} />
     <Link className="files-title" path={`/files/${file.id}`}>{file.name}</Link>
     <small>{moment(file.created_at).fromNow().toString()}</small>
+    <small>{formatBytes(file.size, 2)}</small>
     <div className="grow"></div>
     <DownloadLink file={file} tabIndex="-1">
       <i className="icon icon-download"/>
@@ -193,6 +194,10 @@ class MiscFile extends React.Component {
   }
 }
 
+FileSize = () => {
+  return <span>{formatBytes(this.props.size, 2)}</span>
+}
+
 const getParentIds = (files, file) => {
   let parentId = file.parent_id
   if (typeof parentId !== 'number') return []
@@ -200,4 +205,24 @@ const getParentIds = (files, file) => {
   let parentIds = [parentId]
   if (parent) parentIds = getParentIds(files, parent).concat(parentIds)
   return parentIds
+}
+
+
+const formatBytes = (bytes, decimals) => {
+  if (bytes == 0) return '0 Bytes'
+  const k = 1000
+  const dm = decimals + 1 || 3
+  const sizes = [
+    'bytes',
+    'kb',
+    'mb',
+    'gb',
+    'tb',
+    'pb',
+    'eb',
+    'zb',
+    'yb'
+  ]
+  const i = Math.floor(Math.log(bytes) / Math.log(k))
+  return (bytes / k ** i).toPrecision(dm) + '' + sizes[i]
 }
