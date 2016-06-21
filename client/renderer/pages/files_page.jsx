@@ -194,7 +194,7 @@ class MiscFile extends React.Component {
   }
 }
 
-FileSize = () => {
+const FileSize = () => {
   return <span>{formatBytes(this.props.size, 2)}</span>
 }
 
