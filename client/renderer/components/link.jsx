@@ -26,6 +26,14 @@ export default class Link extends React.Component {
       return false;
     }
 
+    if (this.props.setParams){
+      this.context.emit({
+        type:   'setParams',
+        params: this.props.setParams,
+      });
+      return false;
+    }
+
     if (this.props.path){
       event.preventDefault();
       this.context.emit({

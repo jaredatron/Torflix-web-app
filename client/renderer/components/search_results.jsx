@@ -27,6 +27,8 @@ class SearchResult extends React.Component {
       <ol className="search-result-details inline-list separated-list">
         <li><SearchResultRating rating={result.rating} /></li>
         <li>{result.createdAtAgo}</li>
+        <li>{result.size}</li>
+        <li>{result.seeders}/{result.leechers}</li>
       </ol>
     </div>
   }

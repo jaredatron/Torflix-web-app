@@ -8,20 +8,21 @@ export default function(events){
 
   events.subscribe( event => {
     if (event.type === 'search'){
-      search(event.query)
+      search(event)
     }
   })
 
   var querySubscription = null
 
-  const search = (query) => {
-    if (state.query === query) return;
+  const search = ({query, order}) => {
+    if (state.query === query && state.order === order) return;
     if (querySubscription) querySubscription.dispose()
     state.query = query
+    state.order = order
     state.error = null
     state.results = null
     publish()
-    querySubscription = Torrents.search(query).subscribe(
+    querySubscription = Torrents.search({query, order}).subscribe(
       results => {
         state.results = results
         publish()

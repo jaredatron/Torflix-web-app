@@ -18,8 +18,8 @@ const get = (url) => {
 }
 
 const TorrentSearch = {
-  search(query){
-    return getSearchResults(query)
+  search(search){
+    return getSearchResults(search)
   },
 
   getMagnetLink(torrentId){
@@ -76,8 +76,15 @@ export default TorrentSearch
 
 // requests
 
-const getSearchResults = (query) => {
-  let url = URI(TORRENTZ_HOST+'/search').query({q: query}).toString()
+const getSearchResults = ({query, order}) => {
+  let path = (
+    order === 'size'   ? '/searchS' :
+    order === 'date'   ? '/searchA' :
+    order === 'rating' ? '/searchN' :
+    order === 'peers'  ? '/search' :
+    '/search'
+  )
+  let url = URI(TORRENTZ_HOST+path).query({q: query}).toString()
   return get(url).map(parseSearchResults)
 }
 

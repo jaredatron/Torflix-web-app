@@ -4,16 +4,17 @@ export default function location(events){
   const eventsStream = new Rx.ReplaySubject(1);
 
   const publish = () => {
-    eventsStream.onNext({
-      path:   window.location.pathname,
-      params: searchToObject(window.location.search),
-    })
+    eventsStream.onNext(currentLocation())
   }
 
   Rx.Observable.fromEvent(window, 'popstate').forEach(publish)
 
   const setLocation = (path, params, replace) => {
     var href = hrefFor(path, params);
+    if (href === currentHref()){
+      console.warn('refusing to change to same location '+href)
+      return;
+    }
     if (replace){
       history.replaceState(null, null, href);
     }else{
@@ -22,16 +23,43 @@ export default function location(events){
     publish()
   }
 
+  const setParams = (params) => {
+    let newParams = Object.assign(currentParams(), params)
+    setLocation(currentPath(), newParams)
+  }
+
   events.subscribe(
     event => {
       if (event.type === 'changeLocation'){
         setLocation(event.path, event.params, event.replace)
+      }
+      if (event.type === 'setParams'){
+        setParams(event.params)
       }
     }
   )
 
   publish()
   return eventsStream;
+}
+
+const currentPath = () => {
+  return window.location.pathname;
+}
+
+const currentParams = () => {
+  return searchToObject(window.location.search);
+}
+
+const currentLocation = () => {
+  return {
+    path: currentPath(),
+    params: currentParams(),
+  };
+}
+
+const currentHref = () =>{
+  return hrefFor(currentPath(), currentParams());
 }
 
 const locationToString = (path, params) => {
