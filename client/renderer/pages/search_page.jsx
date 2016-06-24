@@ -25,10 +25,10 @@ export default class SearchPage extends Page {
   }
 
   render(props) {
-    const query = props.route.params.query
+    let {query, order} = props.route.params
     const search = props.search || {}
     return <Layout className="search-page">
-      <SearchControls/>
+      <SearchControls order={order}/>
       <SearchResults search={search}/>
     </Layout>
   }
@@ -36,13 +36,20 @@ export default class SearchPage extends Page {
 }
 
 
-class SearchControls extends React.Component {
-  render(){
-    return <ol className="inline-list separated-list">
-      <Link setParams={{order:"rating"}}>rating</Link>
-      <Link setParams={{order:"date"}}>date</Link>
-      <Link setParams={{order:"size"}}>size</Link>
-      <Link setParams={{order:"peers"}}>peers</Link>
-    </ol>
-  }
+const SearchControls = (props) => {
+  let { order } = props
+  return <ol className="search-page-controls inline-list separated-list">
+    <SetSearchOrderLink active={order == "rating"} order="rating"/>
+    <SetSearchOrderLink active={order == "date" } order="date"/>
+    <SetSearchOrderLink active={order == "size" } order="size"/>
+    <SetSearchOrderLink active={order == "peers"} order="peers"/>
+  </ol>
+}
+
+
+const SetSearchOrderLink = (props) => {
+  return <Link
+    setParams={{order: props.order}}
+    className={(props.active ? 'active ' : '')+props.className}
+  >{props.order}</Link>
 }

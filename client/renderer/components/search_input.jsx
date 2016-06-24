@@ -26,7 +26,7 @@ export default class SearchInput extends React.Component {
     return <input
       {...this.props}
       ref="input"
-      className={"SearchInput "+(this.props.className||'')}
+      className={"search-input "+(this.props.className||'')}
       defaultValue={query}
       onKeyDown={this.onKeyDown}
       autoFocus={this.props.autoFocus}
