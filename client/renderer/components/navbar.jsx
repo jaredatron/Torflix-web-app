@@ -50,7 +50,7 @@ export default class Navbar extends React.Component {
       <NavbarLink path="/files"     >Files</NavbarLink>
       <NavbarLink path="/tv-shows"  >TV Shows</NavbarLink>
       <div className="grow" />
-      <div><SearchInput ref="searchInput" autoFocus /></div>
+      <SearchInput ref="searchInput" className="grow" autoFocus />
       <LogoutLink tabIndex="-1">Logout</LogoutLink>
       <div>{auth.username}</div>
     </div>

@@ -24,8 +24,9 @@ export default class SearchInput extends React.Component {
   render() {
     const query = this.context.state.route.params.query
     return <input
+      {...this.props}
       ref="input"
-      className="SearchInput"
+      className={"SearchInput "+(this.props.className||'')}
       defaultValue={query}
       onKeyDown={this.onKeyDown}
       autoFocus={this.props.autoFocus}
