@@ -16,35 +16,51 @@ export default class SearchResults extends React.Component {
   }
 }
 
-
-class SearchResult extends React.Component {
-  render(){
-    const result = this.props.result
-    return <div className="search-result">
-      <div>
-        <Link path={'/download/torrent/'+result.id}>{result.name}</Link>
-      </div>
-      <ol className="search-result-details inline-list separated-list">
-        <li><SearchResultRating rating={result.rating} /></li>
-        <li>{result.createdAtAgo}</li>
-        <li>{result.size}</li>
-        <li>{result.seeders}/{result.leechers}</li>
-      </ol>
+const SearchResult = (props) => {
+  const result = props.result
+  return <div className="search-result">
+    <div>
+      <DownloadTorrentLink torrentId={result.id}>{result.name}</DownloadTorrentLink>
     </div>
-  }
+    <ol className="search-result-details inline-list separated-list">
+      <li><SearchResultRating rating={result.rating} /></li>
+      <li>{result.createdAtAgo}</li>
+      <li>{result.size}</li>
+      <li>{result.seeders}/{result.leechers}</li>
+    </ol>
+  </div>
 }
 
+const SearchResultRating = (props) => {
+  const rating = props.rating;
+  let className = "search-results-rating rating-" + (
+    rating > 6 ? 'awesome' :
+    rating > 4 ? 'great' :
+    rating > 2 ? 'good' :
+    'neutral'
+  )
 
-class SearchResultRating extends React.Component {
-  render(){
-    const rating = this.props.rating;
-    let className = "search-results-rating rating-" + (
-      rating > 6 ? 'awesome' :
-      rating > 4 ? 'great' :
-      rating > 2 ? 'good' :
-      'neutral'
-    )
+  return <span className={className}>{rating}</span>
+}
 
-    return <span className={className}>{rating}</span>
+class DownloadTorrentLink  extends React.Component {
+
+  static contextTypes = {
+    emit: React.PropTypes.func.isRequired
   }
+
+  onClick(event) {
+    if (event.metaKey === false) return true;
+    event.preventDefault()
+    this.context.emit({
+      type: 'download-torrent',
+      torrentId: this.props.torrentId,
+    })
+  }
+
+  render() {
+    const path = '/download/torrent/'+this.props.torrentId
+    return <Link path={path} onClick={this.onClick.bind(this)}>{this.props.children}</Link>
+  }
+
 }
