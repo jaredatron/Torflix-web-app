@@ -10,30 +10,6 @@ export default function(events){
     if (event.type === 'tv-shows:load') return loadTvShows()
   })
 
-  const loadTvShows = () => {
-    if (state.loading) return
-    state.loading = true
-    publish()
-    request({
-      serverProxy: true,
-      method: 'GET',
-      url: 'https://eztv.ag/showlist/'
-    }).subscribe(
-      response => {
-        state.tvShows = parseTvShows(response.text)
-        state.loading = false
-        publish()
-      },
-      error => {
-        state.error = error
-        publish()
-      },
-      complete => {
-
-      }
-    )
-  }
-
 
   publish()
   return stateStream;
