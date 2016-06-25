@@ -13,11 +13,7 @@ export default class Alerts extends React.Component {
       const alert = alertsState[alertId]
       return <Alert key={alertId} alert={alert} />
     })
-    return <div className="alerts">
-      <div className="alerts-container">
-        {alerts}
-      </div>
-    </div>
+    return <div className="alerts">{alerts}</div>
   }
 }
 
