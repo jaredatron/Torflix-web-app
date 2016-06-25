@@ -71,6 +71,7 @@ const App = {
 import now       from './resources/now'
 import route     from './resources/route'
 import auth      from './resources/auth'
+import alerts    from './resources/alerts'
 import transfers from './resources/transfers'
 import files     from './resources/files'
 import tvShows   from './resources/tv_shows'
@@ -81,6 +82,7 @@ App.state = new State(App.events, {
   now,
   route,
   auth,
+  alerts,
   transfers,
   files,
   tvShows,

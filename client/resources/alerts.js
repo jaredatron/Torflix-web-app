@@ -1,34 +1,33 @@
 import Rx from 'rx-dom'
 import request from '../request'
 
-export default function(events){
+export default (events) => {
   let state = {}
   let stateStream = new Rx.ReplaySubject(1)
   const publish = () => stateStream.onNext(state)
 
   events.subscribe( event => {
-    if (event.type === 'tv-shows:load') return loadTvShows()
+    if (event.type === 'alert')         return createAlert(event.alert)
+    if (event.type === 'dismiss-alert') return dismissAlert(event.alertId)
   })
 
+  let alertIdSequence = 0
+  const createAlert = (alert) => {
+    const timeout = (1000 * 10); // seconds
+    const alertId = alertIdSequence++;
+    state[alertId] = {
+      id: alertId,
+      message: alert,
+    }
+    publish()
+    // setTimeout(()=>{ dismissAlert(alertId) }, timeout)
+  }
+
+  const dismissAlert = (alertId) => {
+    delete state[alertId]
+    publish()
+  }
 
   publish()
   return stateStream;
-}
-
-
-const parseTvShows = (html) => {
-  var doc = document.createElement('html')
-  doc.innerHTML = html
-
-  const tableRows = doc.querySelectorAll('table.forum_header_border tbody tr[name=hover]')
-  const tvShows = [].map.call(tableRows, (tr) => {
-    const eztvHref = tr.querySelector('a').href
-    const id = eztvHref.match(/shows\/(\d+)\//)[1]
-    return {
-      id: id,
-      name: tr.querySelector('td').innerText,
-      eztvHref: eztvHref,
-    }
-  })
-  return tvShows
 }

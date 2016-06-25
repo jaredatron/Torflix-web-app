@@ -1,0 +1,33 @@
+.alerts
+  margin-bottom: 1em
+  position: relative
+  top: -1em
+  user-select: none
+  pointer-events: none
+
+  > .alerts-container
+    position: absolute
+    top: 0
+    left: 0
+    right: 0
+
+    display: flex
+    flex-wrap: nowrap
+    justify-content: flex-start
+    align-items: center
+    align-content: flex-start
+    flex-direction: column
+
+    > .alert
+      display: inline-block
+      color: white
+      background-color: $blue
+      border-radius: 5px
+      padding: 4px 6px
+      border: 1px solid darkblue
+      margin-bottom: 2px
+
+      .link.close-alert
+        margin-left: 0.5em
+        pointer-events: auto
+        color: inherit
