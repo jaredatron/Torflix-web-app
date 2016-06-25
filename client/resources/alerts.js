@@ -7,7 +7,7 @@ export default (events) => {
   const publish = () => stateStream.onNext(state)
 
   events.subscribe( event => {
-    if (event.type === 'alert')         return createAlert(event.alert)
+    if (event.type === 'alert')         return createAlert(event.message)
     if (event.type === 'dismiss-alert') return dismissAlert(event.alertId)
   })
 
@@ -20,7 +20,7 @@ export default (events) => {
       message: alert,
     }
     publish()
-    // setTimeout(()=>{ dismissAlert(alertId) }, timeout)
+    setTimeout(()=>{ dismissAlert(alertId) }, timeout)
   }
 
   const dismissAlert = (alertId) => {

@@ -20,7 +20,7 @@ const SearchResult = (props) => {
   const result = props.result
   return <div className="search-result">
     <div>
-      <DownloadTorrentLink torrentId={result.id}>{result.name}</DownloadTorrentLink>
+      <DownloadResultLink result={result} />
     </div>
     <ol className="search-result-details inline-list separated-list">
       <li><SearchResultRating rating={result.rating} /></li>
@@ -43,7 +43,7 @@ const SearchResultRating = (props) => {
   return <span className={className}>{rating}</span>
 }
 
-class DownloadTorrentLink  extends React.Component {
+class DownloadResultLink  extends React.Component {
 
   static contextTypes = {
     emit: React.PropTypes.func.isRequired
@@ -52,15 +52,22 @@ class DownloadTorrentLink  extends React.Component {
   onClick(event) {
     if (event.metaKey === false) return true;
     event.preventDefault()
+
+    const { result } = this.props
     this.context.emit({
       type: 'download-torrent',
-      torrentId: this.props.torrentId,
+      torrentId: result.id,
+    })
+    this.context.emit({
+      type: 'alert',
+      message: `downloading "${result.name}"`,
     })
   }
 
   render() {
-    const path = '/download/torrent/'+this.props.torrentId
-    return <Link path={path} onClick={this.onClick.bind(this)}>{this.props.children}</Link>
+    const { result } = this.props
+    const path = '/download/torrent/'+result.id
+    return <Link path={path} onClick={this.onClick.bind(this)}>{result.name}</Link>
   }
 
 }
