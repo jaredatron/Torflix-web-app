@@ -46,6 +46,7 @@ export default class Navbar extends React.Component {
 
     return <div className="navbar theme-dark columns">
       <NavbarLink path="/"          >Torflix</NavbarLink>
+      <NavbarLink path="/search"    >Search</NavbarLink>
       <NavbarLink path="/transfers" >Transfers</NavbarLink>
       <NavbarLink path="/files"     >Files</NavbarLink>
       <NavbarLink path="/tv-shows"  >TV Shows</NavbarLink>

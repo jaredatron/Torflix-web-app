@@ -10,6 +10,9 @@ export default class SearchInput extends React.Component {
 
   constructor(){
     super()
+    this.state = {
+      value: null,
+    }
     this.onKeyDown = this.onKeyDown.bind(this)
   }
 
@@ -26,15 +29,30 @@ export default class SearchInput extends React.Component {
     })
   }
 
+  onChange(event){
+    const value = event.target.value
+    this.setState({value})
+  }
+
+  componentWillReceiveProps(nextProps){
+    const { query } = this.context.state.route.params
+    if (this.query !== query) this.setState({value: null})
+    this.query = query
+  }
+
   render() {
-    const query = this.context.state.route.params.query
+    const { query } = this.context.state.route.params
+    let { value } = this.state
+    if (value === null) value = query
     return <input
       {...this.props}
       ref="input"
+      type="text"
       className={"search-input "+(this.props.className||'')}
-      defaultValue={query}
       onKeyDown={this.onKeyDown}
       autoFocus={this.props.autoFocus}
+      value={value}
+      onChange={this.onChange.bind(this)}
     />
   }
 }

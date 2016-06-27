@@ -76,13 +76,13 @@ export default TorrentSearch
 
 // requests
 
-const getSearchResults = ({query, order}) => {
-  let path = (
-    order === 'size'   ? '/searchS' :
-    order === 'date'   ? '/searchA' :
-    order === 'rating' ? '/searchN' :
-    order === 'peers'  ? '/search' :
-    '/search'
+const getSearchResults = ({query, order, verified}) => {
+  let path  = verified ? '/verified' : '/search'
+  path += (
+    order === 'size'   ? 'S' :
+    order === 'date'   ? 'A' :
+    order === 'rating' ? 'N' :
+    order === 'peers'  ? '' : ''
   )
   let url = URI(TORRENTZ_HOST+path).query({q: query}).toString()
   return get(url).map(parseSearchResults)

@@ -19,6 +19,7 @@ router.match('/files/:fileId',               FilesPage);
 router.match('/play/:fileId',                PlayVideoPage);
 router.match('/tv-shows',                    TvShowsPage);
 router.match('/tv-shows/:tvShowName',        TvShowsPage);
+router.match('/search',                      SearchPage);
 router.match('/search/*query',               SearchPage);
 router.match('/download/torrent/:torrentId', TorrentDownloadPage);
 router.match('/*path',                       NotFoundPage);

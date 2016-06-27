@@ -21,6 +21,10 @@ const SearchResult = (props) => {
   return <div className="search-result">
     <div>
       <DownloadResultLink result={result} />
+      &nbsp;
+      <Link href={`http://torrentz.com/${result.id}`} target="_blank" tabIndex="-1">
+        <i className="icon icon-external-link-square"/>
+      </Link>
     </div>
     <ol className="search-result-details inline-list separated-list">
       <li><SearchResultRating rating={result.rating} /></li>
@@ -49,25 +53,30 @@ class DownloadResultLink  extends React.Component {
     emit: React.PropTypes.func.isRequired
   }
 
-  onClick(event) {
-    if (event.metaKey === false) return true;
-    event.preventDefault()
-
+  onClick(path, event) {
     const { result } = this.props
-    this.context.emit({
-      type: 'download-torrent',
-      torrentId: result.id,
-    })
-    this.context.emit({
-      type: 'alert',
-      message: `downloading "${result.name}"`,
-    })
+
+    if (event.metaKey === false){
+      this.context.emit({
+        type: 'setPath',
+        path: path,
+      });
+    }else{
+      this.context.emit({
+        type: 'download-torrent',
+        torrentId: result.id,
+      })
+      this.context.emit({
+        type: 'alert',
+        message: `downloading "${result.name}"`,
+      })
+    }
   }
 
   render() {
     const { result } = this.props
     const path = '/download/torrent/'+result.id
-    return <Link path={path} onClick={this.onClick.bind(this)}>{result.name}</Link>
+    return <Link path={path} onClick={this.onClick.bind(this, path)}>{result.name}</Link>
   }
 
 }

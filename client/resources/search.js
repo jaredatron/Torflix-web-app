@@ -14,7 +14,7 @@ export default function(events){
 
   var querySubscription = null
 
-  const search = ({query, order}) => {
+  const search = ({query, order, verified}) => {
     if (state.query === query && state.order === order) return;
     if (querySubscription) querySubscription.dispose()
     state.query = query
@@ -22,7 +22,7 @@ export default function(events){
     state.error = null
     state.results = null
     publish()
-    querySubscription = Torrents.search({query, order}).subscribe(
+    querySubscription = Torrents.search({query, order, verified}).subscribe(
       results => {
         state.results = results
         publish()
