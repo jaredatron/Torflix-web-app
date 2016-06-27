@@ -53,19 +53,21 @@ class DownloadResultLink  extends React.Component {
     emit: React.PropTypes.func.isRequired
   }
 
-  onClick(path, event) {
+  onClick(event) {
     const { result } = this.props
-
+    event.preventDefault()
+    this.context.emit({
+      type: 'download-torrent',
+      torrent: result,
+    })
     if (event.metaKey === false){
       this.context.emit({
-        type: 'setPath',
-        path: path,
+        type: 'setLocation',
+        location: {
+          path: "/transfers",
+        }
       });
     }else{
-      this.context.emit({
-        type: 'download-torrent',
-        torrentId: result.id,
-      })
       this.context.emit({
         type: 'alert',
         message: `downloading "${result.name}"`,
@@ -76,7 +78,7 @@ class DownloadResultLink  extends React.Component {
   render() {
     const { result } = this.props
     const path = '/download/torrent/'+result.id
-    return <Link path={path} onClick={this.onClick.bind(this, path)}>{result.name}</Link>
+    return <Link path={path} onClick={this.onClick.bind(this)}>{result.name}</Link>
   }
 
 }

@@ -15,6 +15,7 @@ export default function(events){
   var querySubscription = null
 
   const search = ({query, order, verified}) => {
+    query = typeof query === 'undefined' ? '' : query+'';
     if (state.query === query && state.order === order) return;
     if (querySubscription) querySubscription.dispose()
     state.query = query

@@ -7,31 +7,39 @@ export default function(events){
 
   events.subscribe( event => {
     if (event.type === 'download-torrent'){
-      downloadTorrent(event.torrentId)
+      downloadTorrent(event.torrent)
     }
   })
 
-  var state = {}
+  var state = {
+    downloads: {}
+  }
   const publish = () => {
+    state.ids = Object.keys(state.downloads)
     stateStream.onNext(state)
   }
 
   var querySubscription = null
 
-  const downloadTorrent = (torrentId) => {
-    if (state[torrentId]) return
-    downloadTorrentStream(torrentId).subscribe(
+  const downloadTorrent = (torrent) => {
+    const {id, name} = torrent
+    if (state.downloads[id]) return
+    downloadTorrentStream(torrent).subscribe(
       downloadState => {
-        state[torrentId] = downloadState
+        state.downloads[id] = downloadState
         publish()
       },
       error => {
         console.warn('downloadTorrent Error', error)
-        state[torrentId] = {error: error}
+        state.downloads[id] = {
+          id: id,
+          name: name,
+          error: error
+        }
         publish()
       },
       complete => {
-        state[torrentId] = {complete: true}
+        delete state.downloads[id]
         publish()
       }
     )
@@ -43,14 +51,17 @@ export default function(events){
 }
 
 
-const downloadTorrentStream = (torrentId) => {
+const downloadTorrentStream = ({id, name}) => {
   return Rx.Observable.create( observer => {
-    var state = {}
+    let state = {
+      id: id,
+      name: name,
+    }
     var getMagnetLinkSubscription
     var addTransferSubscription
     const publish = () => { observer.onNext(state) }
 
-    getMagnetLinkSubscription = Torrents.getMagnetLink(torrentId).subscribe(
+    getMagnetLinkSubscription = Torrents.getMagnetLink(id).subscribe(
       magnetLinkState => {
         state.torrentName  = magnetLinkState.torrentName
         state.trackers     = magnetLinkState.trackers

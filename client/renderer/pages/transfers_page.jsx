@@ -14,22 +14,47 @@ export default class TransfersPage extends Page {
   }
 
   render(props) {
-    const transfers = props.transfers.loaded ?
-      <TransfersList transfers={props.transfers} /> :
-      'Loading...'
-
     return <Layout>
-      {transfers}
+      <TorrentDownloads {...props.torrentDownload} />
+      <Transfers {...props.transfers} />
     </Layout>
   }
 
 }
 
 
-class TransfersList extends React.Component {
+class TorrentDownloads extends React.Component {
   render(){
-    const transfers = this.props.transfers.transfers.map((transfer) => {
-      return <TransferListItem key={transfer.id} transfer={transfer} />
+    const downloads = this.props.ids.map(id => {
+      return <TorrentDownload key={id} id={id} details={this.props.downloads[id]} />
+    })
+    return <div>{downloads}</div>
+  }
+}
+
+class TorrentDownload extends React.Component {
+  render(){
+    const {id, details} = this.props
+    const torrentName = details.torrentName || details.name || torrentId
+    const stateDescription = (
+      details.error ? 'ERROR '+details.error :
+      details.magnetLink ? 'Adding magnet link to Put.io' :
+      details.trackers ? 'Searching for magnet link' :
+      'Searching for trackers'
+    )
+    return <div className="transfers-torrent-download">
+      <div><strong>{torrentName}</strong></div>
+      <div><small>{stateDescription}</small></div>
+    </div>
+  }
+}
+
+class Transfers extends React.Component {
+  render(){
+    if (!this.props.loaded) return <div>Loading...</div>
+
+    const transfers = this.props.transfers.map((transfer) => {
+      return <Transfer key={transfer.id} transfer={transfer} />
     })
     transfers.reverse()
 
@@ -37,7 +62,7 @@ class TransfersList extends React.Component {
   }
 }
 
-class TransferListItem extends React.Component {
+class Transfer extends React.Component {
   render(){
     const transfer = this.props.transfer
 

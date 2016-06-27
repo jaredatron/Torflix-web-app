@@ -34,7 +34,7 @@ export default class TorrentDownloadPage extends Page {
   render(props) {
     const torrentId = this.torrentId
     const downloadState = props.torrentDownload[torrentId] || {}
-    const torrentName = downloadState.torrentName || torrentId
+    const torrentName = downloadState.torrentName || downloadState.name || torrentId
     const stateDescription = (
       downloadState.error ? 'ERROR '+downloadState.error :
       downloadState.magnetLink ? 'Adding magnet link to Put.io' :
