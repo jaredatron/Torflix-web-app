@@ -19,8 +19,10 @@ export default class FilesPage extends Page {
 
     if (fileId === '0') {
       this.emit({
-        type: 'changeLocation',
-        path: '/files',
+        type: 'setLocation',
+        location: {
+          path: '/files',
+        },
         replace: true,
       })
       return

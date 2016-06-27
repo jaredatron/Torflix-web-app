@@ -37,14 +37,24 @@ const App = {
   setState(state){
     App._state = state
 
-    const Page = state.auth.loggedIn ? state.route.page : LoginPage
+    const { auth, route } = state
+    const location = route.location
 
-    if (!(App.page instanceof Page)){
+
+    const Page = auth.loggedIn ? route.page : LoginPage
+
+    state.location = location
+    state.Page = Page
+
+    if (!App.page || App.page.location.url !== location.url){
       if (App.page) App.page.onExit(state)
       App.page = new Page
+      state.page = App.page
+      App.page.location = location
       App.page.emit = App.emit
       App.page.onEnter(state)
     }
+
     App.page.onStateChange(state)
 
     if (!App.instance) App.render() // HACK TODO: FIX

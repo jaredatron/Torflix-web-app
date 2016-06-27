@@ -15,9 +15,14 @@ export default class SearchInput extends React.Component {
 
   onKeyDown(event){
     if (event.keyCode !== 13) return
+    const { location, Page } = this.context.state
+    const params = Page.name === "SearchPage" ? location.params : {}
     this.context.emit({
-      type: 'changeLocation',
-      path: '/search/'+event.target.value,
+      type: 'setLocation',
+      location: {
+        path: '/search/'+event.target.value,
+        params: params,
+      }
     })
   }
 

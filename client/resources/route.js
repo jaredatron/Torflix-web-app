@@ -25,5 +25,9 @@ router.match('/*path',                       NotFoundPage);
 
 
 export default function route(events){
-  return location(events).map( location => router.routeFor(location) )
+  return location(events).map((location) => {
+    let route = router.routeFor(location)
+    route.location = location
+    return route
+  })
 }

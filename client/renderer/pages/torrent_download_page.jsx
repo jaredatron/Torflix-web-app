@@ -21,8 +21,10 @@ export default class TorrentDownloadPage extends Page {
           type: 'transfers:reload'
         })
         this.emit({
-          type: 'changeLocation',
-          path: '/transfers',
+          type: 'setLocation',
+          location: {
+            path: '/transfers',
+          },
           replace: true,
         })
       }
