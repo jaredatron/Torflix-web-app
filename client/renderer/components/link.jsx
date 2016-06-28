@@ -50,10 +50,17 @@ export default class Link extends React.Component {
 
     if (this.props.emit){
       emit(this.props.emit)
+      event.preventDefault()
       return false;
     }
 
-    if (this.props.path || this.props.params){
+    if (this.props.onClick){
+      this.props.onClick(event)
+      event.preventDefault()
+      return false;
+    }
+
+    if (this.props.href || this.props.path || this.props.params){
       const newLocation = parseUri(event.target.href)
 
       if (newLocation.domain !== location.domain) return true
@@ -71,18 +78,20 @@ export default class Link extends React.Component {
   render() {
     let { href, path, params, className, inheritParams } = this.props
 
-    if (typeof path === 'string' || typeof params === 'object'){
-      let currentLocation = this.context.state.route.location
+    if (typeof href !== 'string'){
+      if (typeof path === 'string' || typeof params === 'object'){
+        let currentLocation = this.context.state.route.location
 
-      if (inheritParams){
-        params = Object.assign({}, currentLocation.params, params || {})
+        if (inheritParams){
+          params = Object.assign({}, currentLocation.params, params || {})
+        }
+
+        if (typeof path !== 'string') path = currentLocation.path
+
+        href = pathAndParamsToHref(path, params)
+      }else{
+        href = "javascript:void(null);"
       }
-
-      if (typeof path !== 'string') path = currentLocation.path
-
-      href = pathAndParamsToHref(path, params)
-    }else{
-      href = "javascript:void(null);"
     }
 
     className = 'link '+(className || '')
