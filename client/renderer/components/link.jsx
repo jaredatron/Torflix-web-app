@@ -48,80 +48,42 @@ export default class Link extends React.Component {
     const { state, emit } = this.context
     const { location } = state
 
-    const href = event.target.href
-    const newLocation = parseUri(href)
+    if (this.props.emit){
+      emit(this.props.emit)
+      return false;
+    }
 
-    console.log('HREF', href, parseUri(href))
+    if (this.props.path || this.props.params){
+      const newLocation = parseUri(event.target.href)
 
-    if (newLocation.domain === location.domain){
+      if (newLocation.domain !== location.domain) return true
+
       emit({
         type: 'setLocation',
         location: newLocation,
         replace: this.props.replace,
       });
-      event.preventDefault()
-      return false
     }
-
-    // emit({
-    //   type: 'setLocation',
-    //   href: href,
-    // });
-
-    // const { route } = state
-
-    // // TODO return if any modifier keys are pressed
-    // if (this.props.onClick){
-    //   this.props.onClick(event);
-    //   return false;
-    // }
-
-    // if (this.props.emit){
-    //   this.context.emit(this.props.emit)
-    //   return false;
-    // }
-
-    // if (this.props.updateParams){
-    //   emit({
-    //     type:   'updateParams',
-    //     params: this.props.updateParams,
-    //   });
-    //   return false;
-    // }
-
-    // if (this.props.setPath){
-    //   emit({
-    //     type:   'setPath',
-    //     params: this.props.setPath,
-    //   });
-    //   return false;
-    // }
-
-    // if (this.props.path || this.props.path){
-    //   emit({
-    //     type:   'setLocation',
-    //     path:   this.props.path,
-    //     params: this.props.params,
-    //   });
-    //   return false;
-    // }
+    event.preventDefault()
+    return false
   }
 
   render() {
     let { href, path, params, className, inheritParams } = this.props
-    let currentLocation = this.context.state.route.location
 
-    if (inheritParams){
-      params = Object.assign({}, currentLocation.params, params || {})
-    }
+    if (typeof path === 'string' || typeof params === 'object'){
+      let currentLocation = this.context.state.route.location
 
-    if (params && typeof path !== 'string') path = currentLocation.path
+      if (inheritParams){
+        params = Object.assign({}, currentLocation.params, params || {})
+      }
 
-    if (href === undefined && (typeof path === 'string' || params))
+      if (typeof path !== 'string') path = currentLocation.path
+
       href = pathAndParamsToHref(path, params)
-
-    if (href === undefined)
+    }else{
       href = "javascript:void(null);"
+    }
 
     className = 'link '+(className || '')
 
