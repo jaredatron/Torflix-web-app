@@ -166,6 +166,7 @@ class VideoFile extends React.Component {
       <div className="inline-list separated-list">
         <Link href={file.downloadUrl}>Download</Link>
         <PlayLink file={file}>Play</PlayLink>
+        <PutioLink file={file}>Put.io</PutioLink>
       </div>
       <PlayLink file={file}>
         <img src={file.screenshot} />
