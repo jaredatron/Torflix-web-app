@@ -136,7 +136,7 @@ const DirectoryMemberIcon = ({file}) => {
 }
 
 const DownloadLink = (props) => {
-  let downloadUrl = props.file.downloadUrl
+  let downloadUrl = props.file.downloadUrl || ''
   return downloadUrl ?
     <Link {...props} href={downloadUrl}>{props.children}</Link> :
     null
