@@ -4,7 +4,11 @@ import putio from '../putio'
 export default function(events){
   const POLLING_FREQUENCY = 3000 // miliseconds
 
-  let state = {}
+  let state = {
+    selectedTransfers: [],
+    deletingSelectedTransfers: false,
+    transfersBeingDeleted: [],
+  }
   let stateStream = new Rx.ReplaySubject(1)
   // .subscribeOnCompleted( () => {
   //   if (pollingStream) pollingStream.dispose()
@@ -13,10 +17,14 @@ export default function(events){
   let pollingStream = null
 
   events.subscribe( event => {
-    if (event.type === 'transfers:load')         return loadTransfers()
-    if (event.type === 'transfers:reload')       return reloadTransfers()
-    if (event.type === 'transfers:startPolling') return startPolling()
-    if (event.type === 'transfers:stopPolling')  return stopPolling()
+    if (event.type === 'transfers:load')                  return loadTransfers()
+    if (event.type === 'transfers:reload')                return reloadTransfers()
+    if (event.type === 'transfers:startPolling')          return startPolling()
+    if (event.type === 'transfers:stopPolling')           return stopPolling()
+    if (event.type === 'transfers:toggleTransferSelect')  return toggleTransferSelect(event)
+    if (event.type === 'transfers:confirmDeleteSelected') return confirmDeleteSelected(event)
+    if (event.type === 'transfers:cancelDelete')          return cancelDelete()
+    if (event.type === 'transfers:deleteSelected')        return deleteSelected(event)
   })
 
   const loadTransfers = () => {
@@ -29,7 +37,6 @@ export default function(events){
       state.loaded = true
       publish()
     })
-    publish()
   }
 
   const startPolling = () => {
@@ -41,6 +48,50 @@ export default function(events){
   const stopPolling = () => {
     pollingStream.dispose()
     pollingStream = null
+  }
+
+  const toggleTransferSelect = (event) => {
+    const transferId = event.transfer.id
+    if (state.selectedTransfers.includes(transferId))
+      state.selectedTransfers = state.selectedTransfers.filter(id => id !== transferId)
+    else
+      state.selectedTransfers = state.selectedTransfers.concat([transferId])
+    publish()
+  }
+
+  const confirmDeleteSelected = () => {
+    state.deletingSelectedTransfers = true
+    publish()
+  }
+
+  const cancelDelete = () => {
+    state.deletingSelectedTransfers = false
+    publish()
+  }
+
+  const deleteSelected = (event) => {
+    const { deleteRelatedFiles } = event
+    const transfersBeingDeleted = state.selectedTransfers
+    state.deletingSelectedTransfers = false
+    state.selectedTransfers = []
+    deleteTransfers(transfersBeingDeleted)
+
+  }
+
+  const deleteTransfers = (transfersBeingDeleted) => {
+    transfersBeingDeleted = state.transfers.filter(transfer =>
+      transfersBeingDeleted.includes(transfer.id)
+    ).map(({id}) => id)
+
+    state.transfersBeingDeleted = state.transfersBeingDeleted.concat(transfersBeingDeleted)
+    putio.deleteTransfers(transfersBeingDeleted).subscribe(() => {
+      state.transfers = state.transfers.filter(transfer =>
+        !state.transfersBeingDeleted.includes(transfer.id)
+      )
+      state.transfersBeingDeleted = []
+      publish()
+    })
+    publish()
   }
 
   const publish = () => stateStream.onNext(state)

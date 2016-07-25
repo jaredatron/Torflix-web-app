@@ -14,6 +14,7 @@ $white: #FFFFFF
 $lightgrey: #F2F2F2
 $darkgrey: #626262
 $blue: #3E75FF
+$lightblue: #ced5ff
 
 
 html, body
@@ -115,6 +116,13 @@ video
     &.invisible
       opacity: 0
 
+.modal
+  @extend .layer
+  background-color: rgba(0,0,0,0.5)
+  display: flex
+  align-items: center
+  justify-content: center
+
 @import "./components/navbar"
 @import "./components/alerts"
 @import "./components/search_input"
@@ -122,3 +130,4 @@ video
 @import "./components/transfers_list"
 @import "./components/files_page"
 @import "./components/search_page_controls"
+@import "./components/confirmation_prompt"

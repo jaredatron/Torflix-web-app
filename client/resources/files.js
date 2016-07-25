@@ -4,7 +4,9 @@ import putio from '../putio'
 export default function(events){
   const POLLING_FREQUENCY = 1000 // miliseconds
 
-  let state = {}
+  let state = {
+    filesBeingDeleted: [],
+  }
   let stateStream = new Rx.ReplaySubject(1)
   let pollingStream = null
 
@@ -14,6 +16,7 @@ export default function(events){
     if (event.type === 'files:loadDirectoryContents') return loadDirectoryContents(event.fileId)
     if (event.type === 'files:startPolling') return startPolling(event.fileId)
     if (event.type === 'files:stopPolling')  return stopPolling(event.fileId)
+    if (event.type === 'files:deleteFiles')  return deleteFiles(event)
   })
 
   const loadFile = (fileId) => {
@@ -69,6 +72,10 @@ export default function(events){
         debugger
       }
     )
+  }
+
+  const deleteFiles = (event) => {
+
   }
 
   // const startPolling = () => {
