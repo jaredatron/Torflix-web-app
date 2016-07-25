@@ -17,14 +17,16 @@ export default function(events){
   let pollingStream = null
 
   events.subscribe( event => {
-    if (event.type === 'transfers:load')                  return loadTransfers()
-    if (event.type === 'transfers:reload')                return reloadTransfers()
-    if (event.type === 'transfers:startPolling')          return startPolling()
-    if (event.type === 'transfers:stopPolling')           return stopPolling()
-    if (event.type === 'transfers:toggleTransferSelect')  return toggleTransferSelect(event)
-    if (event.type === 'transfers:confirmDeleteSelected') return confirmDeleteSelected(event)
-    if (event.type === 'transfers:cancelDelete')          return cancelDelete()
-    if (event.type === 'transfers:deleteSelected')        return deleteSelected(event)
+    if (event.type === 'transfers:load')                   return loadTransfers()
+    if (event.type === 'transfers:reload')                 return reloadTransfers()
+    if (event.type === 'transfers:startPolling')           return startPolling()
+    if (event.type === 'transfers:stopPolling')            return stopPolling()
+    if (event.type === 'transfers:toggleTransferSelect')   return toggleTransferSelect(event)
+    if (event.type === 'transfers:selectAllTransfers')     return selectAllTransfers()
+    if (event.type === 'transfers:emptySelectedTransfers') return emptySelectedTransfers()
+    if (event.type === 'transfers:confirmDeleteSelected')  return confirmDeleteSelected(event)
+    if (event.type === 'transfers:cancelDelete')           return cancelDelete()
+    if (event.type === 'transfers:deleteSelected')         return deleteSelected(event)
   })
 
   const loadTransfers = () => {
@@ -51,7 +53,7 @@ export default function(events){
   }
 
   const toggleTransferSelect = (event) => {
-    const transferId = event.transfer.id
+    const transferId = event.transferId || event.transfer.id
     if (state.selectedTransfers.includes(transferId))
       state.selectedTransfers = state.selectedTransfers.filter(id => id !== transferId)
     else
@@ -59,7 +61,18 @@ export default function(events){
     publish()
   }
 
+  const selectAllTransfers = () => {
+    state.selectedTransfers = state.transfers.map(({id})=> id)
+    publish()
+  }
+
+  const emptySelectedTransfers = () => {
+    state.selectedTransfers = []
+    publish()
+  }
+
   const confirmDeleteSelected = () => {
+    if (state.selectedTransfers.length === 0) return;
     state.deletingSelectedTransfers = true
     publish()
   }

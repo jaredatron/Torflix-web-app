@@ -7,12 +7,68 @@ import ConfirmationPrompt from '../components/confirmation_prompt.jsx'
 
 export default class TransfersPage extends Page {
 
+  constructor(){
+    super()
+    this.onKeyDown = this.onKeyDown.bind(this)
+  }
+
   onEnter(){
     this.emit('transfers:startPolling')
+    document.addEventListener('keydown', this.onKeyDown)
   }
 
   onExit(){
     this.emit('transfers:stopPolling')
+    document.removeEventListener('keydown', this.onKeyDown)
+  }
+
+  focusNextElement(target){
+    let nextElement = target.nextElementSibling
+    while (!nextElement.matches('[tabIndex]'))
+      nextElement = nextElement.nextElementSibling
+    nextElement.focus();
+  }
+
+  focusPreviousElement(target){
+    let previous = target.previousSibling
+    while (!previous.matches('[tabIndex]'))
+      previous = previous.previousSibling
+    previous.focus();
+  }
+
+  toggleSelected(target){
+    const transferId = target.attributes.getNamedItem('data-transfer-id').value
+    this.emit({
+      type: 'transfers:toggleTransferSelect',
+      transferId: Number(transferId),
+    })
+  }
+
+  onKeyDown(event){
+    const transferSelector = '.transfers-list-transfer'
+    const { key, target } = event
+    if (target.matches('input,textarea,select')) return;
+    console.log('onKeyDown', key, target)
+    console.log(transferSelector)
+    if (key === 'j'){
+      if (target.matches(transferSelector))
+        this.focusNextElement(target)
+      else
+        document.querySelector(transferSelector).focus()
+    }
+    if (key === 'k'){
+      if (target.matches(transferSelector))
+        this.focusPreviousElement(target)
+      else
+        document.querySelector(transferSelector).focus()
+    }
+    if (key === 'x'){
+      if (target.matches(transferSelector))
+        this.toggleSelected(target)
+    }
+    if (key === 'd'){
+      this.emit('transfers:confirmDeleteSelected')
+    }
   }
 
   render(props) {
@@ -20,6 +76,7 @@ export default class TransfersPage extends Page {
 
     return <Layout>
       <ActionConfirmationPrompt transfers={transfers} />
+      <Controls {...transfers} />
       <TorrentDownloads {...torrentDownload} />
       <Transfers {...transfers} />
     </Layout>
@@ -82,7 +139,6 @@ class Transfer extends React.Component {
   constructor(){
     super()
     this.toggleSelected = this.toggleSelected.bind(this)
-    this.onKeyPress = this.onKeyPress.bind(this)
   }
 
   toggleSelected(){
@@ -92,36 +148,6 @@ class Transfer extends React.Component {
     })
   }
 
-  focusNextElement(){
-    let nextElement = this.refs.container.nextElementSibling
-    while (!nextElement.matches('[tabIndex]'))
-      nextElement = nextElement.nextElementSibling
-    nextElement.focus();
-  }
-
-  focusPreviousElement(){
-    let previous = this.refs.container.previousSibling
-    while (!previous.matches('[tabIndex]'))
-      previous = previous.previousSibling
-    previous.focus();
-  }
-
-  onKeyPress(event){
-    const { key } = event
-    if (key === 'x'){
-      if (this.props.beingDeleted) return;
-      this.toggleSelected()
-    }
-    if (key === 'j'){
-      this.focusNextElement()
-    }
-    if (key === 'k'){
-      this.focusPreviousElement()
-    }
-    if (key === 'd'){
-      this.context.emit('transfers:confirmDeleteSelected')
-    }
-  }
 
   render(){
     const { transfer, selected, beingDeleted } = this.props
@@ -141,7 +167,13 @@ class Transfer extends React.Component {
 
     const tabIndex = beingDeleted ? undefined : 0
 
-    return <div ref="container" className={className} tabIndex={tabIndex} onKeyPress={this.onKeyPress}>
+    return <div
+        ref="container"
+        className={className}
+        tabIndex={tabIndex}
+        onKeyPress={this.onKeyPress}
+        data-transfer-id={transfer.id}
+      >
       <div>
         <input
           type="checkbox"
@@ -156,6 +188,44 @@ class Transfer extends React.Component {
         <div>
           <small>{transfer.status_message}</small>
         </div>
+      </div>
+    </div>
+  }
+}
+class Controls extends React.Component {
+  static contextTypes = {
+    emit: React.PropTypes.func.isRequired
+  }
+
+  constructor(){
+    super()
+    this.selectAll = this.selectAll.bind(this)
+    this.clearSelection = this.clearSelection.bind(this)
+    this.deleteSelected = this.deleteSelected.bind(this)
+  }
+
+  selectAll(){
+    this.context.emit('transfers:selectAllTransfers')
+  }
+
+  clearSelection(){
+    this.context.emit('transfers:emptySelectedTransfers')
+  }
+
+  deleteSelected(){
+    this.context.emit('transfers:confirmDeleteSelected')
+  }
+
+  render(){
+    return <div className="transfers-page-controls">
+      <div>
+        <Link onClick={this.selectAll}>all</Link>
+        <span> | </span>
+        <Link onClick={this.clearSelection}>none</Link>
+      </div>
+      <div className="grow" />
+      <div>
+        <Link onClick={this.deleteSelected}>delete</Link>
       </div>
     </div>
   }
