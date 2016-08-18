@@ -2,7 +2,8 @@ import Rx from 'rx-dom'
 import request from './request'
 import URI from 'urijs'
 
-const TORRENTZ_HOST = 'http://Torrentz.eu'
+// const TORRENTZ_HOST = 'http://torrentz.eu'
+const TORRENTZ_HOST = 'https://torrentzeu.to'
 
 const get = (url) => {
   return request({
@@ -203,7 +204,7 @@ const parseSearchResults = html => {
       result.leechers = node.querySelector('dd > .d').innerText
       results.push(result)
     }catch(error){
-      console.warn('failed to parse torrentz.com result html', node)
+      console.warn('failed to parse '+TORRENTZ_HOST+' result html', node)
       console.error(error)
     }
   })
