@@ -31,7 +31,7 @@ export default class Navbar extends React.Component {
   }
 
   render() {
-    const { auth, renderCount, route } = this.context.state
+    const { renderCound, auth, renderCount, route } = this.context.state
     const path = route.path
     // const activeLink = getActiveLink(route.path)
 
@@ -53,6 +53,7 @@ export default class Navbar extends React.Component {
       <div className="grow" />
       <SearchInput ref="searchInput" className="grow" autoFocus />
       <LogoutLink tabIndex="-1">Logout</LogoutLink>
+      <div>{renderCound}</div>
       <div>{auth.username}</div>
     </div>
   }

@@ -34,8 +34,12 @@ const App = {
     this.sub2 && this.sub2.dispose()
   },
 
+  renderCount: 0,
+
   setState(state){
+    App.renderCount++
     App._state = state
+    state.renderCound = App.renderCount
 
     const { auth, route } = state
     const location = route.location
