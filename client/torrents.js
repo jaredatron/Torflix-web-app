@@ -3,7 +3,8 @@ import request from './request'
 import URI from 'urijs'
 
 // const TORRENTZ_HOST = 'http://torrentz.eu'
-const TORRENTZ_HOST = 'https://torrentzeu.to'
+// const TORRENTZ_HOST = 'https://torrentzeu.to'
+const TORRENTZ_HOST = 'https://torrentz2.eu'
 
 const get = (url) => {
   return request({
@@ -39,7 +40,6 @@ const TorrentSearch = {
 
       getTrackersForTorrentId(torrentId).subscribe(
         results => {
-          // throw new Error('ass')
           state.torrentName = results.torrentName;
           state.trackers = results.trackers;
           publish()
@@ -85,7 +85,7 @@ const getSearchResults = ({query, order, verified}) => {
     order === 'rating' ? 'N' :
     order === 'peers'  ? '' : ''
   )
-  let url = URI(TORRENTZ_HOST+path).query({q: query}).toString()
+  let url = URI(TORRENTZ_HOST+path).query({f: query}).toString()
   return get(url).map(parseSearchResults)
 }
 
@@ -182,26 +182,27 @@ const trackerParsers = {
 
 // parsers
 
-const parseSearchResults = html => {
+const parseSearchResults = document => {
   let results = [];
-  [].forEach.call(html.querySelectorAll('.results > dl'), node => {
+  [].forEach.call(document.querySelectorAll('.results > dl'), node => {
     let result = {};
     try{
       if (node.innerText.includes('removed in compliance')) return;
       result.name = node.querySelector('dt > a').innerText
       result.href = node.querySelector('dt > a').href
       result.id = result.href.match(/\/([^\/]+)$/)[1]
-      result.rating = node.querySelector('dd > .v').innerText
+      result.rating = node.querySelector('dd > span:nth-child(1)').innerText
 
-      let createdAtNode = node.querySelector('dd > .a > span')
+
+      let createdAtNode = node.querySelector('dd > span:nth-child(2)')
       if (createdAtNode){
         result.createdAt = createdAtNode.title
         result.createdAtAgo = createdAtNode.innerText
       }
-      let sizeNode = node.querySelector('dd > .s')
+      let sizeNode = node.querySelector('dd > span:nth-child(3)')
       if (sizeNode) result.size = sizeNode.innerText
-      result.seeders = node.querySelector('dd > .u').innerText
-      result.leechers = node.querySelector('dd > .d').innerText
+      result.seeders = node.querySelector('dd > span:nth-child(4)').innerText
+      result.leechers = node.querySelector('dd > span:nth-child(5)').innerText
       results.push(result)
     }catch(error){
       console.warn('failed to parse '+TORRENTZ_HOST+' result html', node)
@@ -211,9 +212,9 @@ const parseSearchResults = html => {
   return results
 }
 
-const parseTorrentTrackersPage = html => {
-  let torrentName = html.querySelector('.download > h2 > span').innerText
-  let links = html.querySelectorAll('.download > dl > dt > a[href][rel=e]')
+const parseTorrentTrackersPage = document => {
+  let torrentName = document.querySelector('.download > h2 > span').innerText
+  let links = document.querySelectorAll('.download > dl > dt > a[href]')
   let trackers = [].map.call(links, link => link.href)
   return { torrentName, trackers }
 }
