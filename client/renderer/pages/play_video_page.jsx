@@ -89,7 +89,7 @@ class Video extends React.Component {
     let sources = [
       <source key="streamUrl" src={file.streamUrl} type={`video/${file.extension}`} />
     ]
-    if (file.is_mp4_available) sources.push(
+    if (file.mp4StreamUrl) sources.push(
       <source key="mp4StreamUrl" src={file.mp4StreamUrl} type="video/mp4" />
     )
 
