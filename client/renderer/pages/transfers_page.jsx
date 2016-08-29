@@ -4,71 +4,17 @@ import Layout from '../components/layout.jsx'
 import Link from '../components/link.jsx'
 import Modal from '../components/modal.jsx'
 import ConfirmationPrompt from '../components/confirmation_prompt.jsx'
+import SelectableList from '../components/selectable_list.jsx'
 
 export default class TransfersPage extends Page {
 
-  constructor(){
-    super()
-    this.onKeyDown = this.onKeyDown.bind(this)
-  }
-
   onEnter(){
+    // this.emit('transfers:load')
     this.emit('transfers:startPolling')
-    document.addEventListener('keydown', this.onKeyDown)
   }
 
   onExit(){
     this.emit('transfers:stopPolling')
-    document.removeEventListener('keydown', this.onKeyDown)
-  }
-
-  focusNextElement(target){
-    let nextElement = target.nextElementSibling
-    while (!nextElement.matches('[tabIndex]'))
-      nextElement = nextElement.nextElementSibling
-    nextElement.focus();
-  }
-
-  focusPreviousElement(target){
-    let previous = target.previousSibling
-    while (!previous.matches('[tabIndex]'))
-      previous = previous.previousSibling
-    previous.focus();
-  }
-
-  toggleSelected(target){
-    const transferId = target.attributes.getNamedItem('data-transfer-id').value
-    this.emit({
-      type: 'transfers:toggleTransferSelect',
-      transferId: Number(transferId),
-    })
-  }
-
-  onKeyDown(event){
-    const transferSelector = '.transfers-list-transfer'
-    const { key, target } = event
-    if (target.matches('input,textarea,select')) return;
-    console.log('onKeyDown', key, target)
-    console.log(transferSelector)
-    if (key === 'j'){
-      if (target.matches(transferSelector))
-        this.focusNextElement(target)
-      else
-        document.querySelector(transferSelector).focus()
-    }
-    if (key === 'k'){
-      if (target.matches(transferSelector))
-        this.focusPreviousElement(target)
-      else
-        document.querySelector(transferSelector).focus()
-    }
-    if (key === 'x'){
-      if (target.matches(transferSelector))
-        this.toggleSelected(target)
-    }
-    if (key === 'd'){
-      this.emit('transfers:confirmDeleteSelected')
-    }
   }
 
   render(props) {
@@ -76,9 +22,11 @@ export default class TransfersPage extends Page {
 
     return <Layout>
       <ActionConfirmationPrompt transfers={transfers} />
-      <Controls {...transfers} />
       <TorrentDownloads {...torrentDownload} />
-      <Transfers {...transfers} />
+      <Transfers
+        {...transfers}
+        onDeleteTransfers={this.onDeleteTransfers}
+      />
     </Layout>
   }
 
@@ -106,49 +54,60 @@ const TorrentDownload = ({id, details}) => {
   </div>
 }
 
-const Transfers = (props) => {
-  const {
-    loaded,
-    transfers,
-    selectedTransfers,
-    transfersBeingDeleted,
-  } = props
-
-  if (!loaded) return <div>Loading...</div>
-
-  const transferComponents = transfers.slice().reverse().map((transfer) => {
-    const selected = selectedTransfers.includes(transfer.id)
-    const beingDeleted = transfersBeingDeleted.includes(transfer.id)
-    return <Transfer
-      key={transfer.id}
-      transfer={transfer}
-      selected={selected}
-      beingDeleted={beingDeleted}
-    />
-  })
-
-  return <div className="transfers-list">{transferComponents}</div>
-}
-
-
-class Transfer extends React.Component {
+class Transfers extends React.Component {
   static contextTypes = {
     emit: React.PropTypes.func.isRequired
   }
 
   constructor(){
     super()
-    this.toggleSelected = this.toggleSelected.bind(this)
+    this.deleteTransfers = this.deleteTransfers.bind(this)
   }
 
-  toggleSelected(){
+  deleteTransfers(transferIds){
     this.context.emit({
-      type: 'transfers:toggleTransferSelect',
-      transfer: this.props.transfer,
+      type: 'transfers:delete',
+      transferIds: transferIds,
     })
   }
 
+  render(){
+    const {
+      loaded,
+      transfersBeingDeleted,
+    } = this.props
 
+    if (!loaded) return <div>Loading...</div>
+
+    const transfers = this.props.transfers.slice().reverse().map( transfer => {
+      const beingDeleted = transfersBeingDeleted.includes(transfer.id)
+      return {
+        key: transfer.id,
+        transfer: transfer,
+        beingDeleted: beingDeleted,
+        selectable: !beingDeleted,
+      }
+    })
+
+    const props = {
+      className: "transfers-list",
+      members: transfers,
+      memberComponent: Transfer,
+      actions: [
+        {
+          name: 'delete',
+          onClick: this.deleteTransfers,
+        }
+      ],
+      orderings: ['createdAt']
+    }
+
+    return <SelectableList {...props} />
+  }
+}
+
+
+class Transfer extends React.Component {
   render(){
     const { transfer, selected, beingDeleted } = this.props
     let className = "transfers-list-transfer"
@@ -166,20 +125,13 @@ class Transfer extends React.Component {
       <div>{transfer.name}</div>
 
     const tabIndex = beingDeleted ? undefined : 0
-
-    return <div
-        ref="container"
-        className={className}
-        tabIndex={tabIndex}
-        onKeyPress={this.onKeyPress}
-        data-transfer-id={transfer.id}
-      >
+    return <div className={className}>
       <div>
         <input
           type="checkbox"
           checked={selected}
           tabIndex="-1"
-          onChange={this.toggleSelected}
+          onChange={this.props.toggleSelected}
           disabled={beingDeleted}
         />
       </div>
@@ -192,44 +144,7 @@ class Transfer extends React.Component {
     </div>
   }
 }
-class Controls extends React.Component {
-  static contextTypes = {
-    emit: React.PropTypes.func.isRequired
-  }
 
-  constructor(){
-    super()
-    this.selectAll = this.selectAll.bind(this)
-    this.clearSelection = this.clearSelection.bind(this)
-    this.deleteSelected = this.deleteSelected.bind(this)
-  }
-
-  selectAll(){
-    this.context.emit('transfers:selectAllTransfers')
-  }
-
-  clearSelection(){
-    this.context.emit('transfers:emptySelectedTransfers')
-  }
-
-  deleteSelected(){
-    this.context.emit('transfers:confirmDeleteSelected')
-  }
-
-  render(){
-    return <div className="transfers-page-controls">
-      <div>
-        <Link onClick={this.selectAll}>all</Link>
-        <span> | </span>
-        <Link onClick={this.clearSelection}>none</Link>
-      </div>
-      <div className="grow" />
-      <div>
-        <Link onClick={this.deleteSelected}>delete</Link>
-      </div>
-    </div>
-  }
-}
 
 
 const ActionConfirmationPrompt = ({ transfers }) => {

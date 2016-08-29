@@ -16,12 +16,8 @@
     flex-direction: row
     white-space: nowrap
 
-    background-color: $white
-    &:nth-child(odd)
-      background-color: $lightgrey
-
-
-    &.directory
+    &.files-directory-member-selected
+      background-color: #dbe0ff
 
     .files-title
       text-overflow: ellipsis
@@ -30,3 +26,7 @@
     > *
       padding: 0 5px
 
+
+  & *:active, & *:focus
+    > .files-directory-member
+      background-color: #c1caff

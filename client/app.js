@@ -114,6 +114,11 @@ export default App
 
 window.App = App;
 
+import React from 'react';
+import ReactDOM from 'react-dom';
+window.React = React
+window.ReactDOM = ReactDOM
+
 import putio from './putio'
 App.putio = putio
 

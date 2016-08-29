@@ -2,16 +2,14 @@ import React from 'react'
 import Page from '../page.js'
 import Layout from '../components/layout.jsx'
 import Link from '../components/link.jsx'
+import SelectableList from '../components/selectable_list.jsx'
 import moment from 'moment'
 
 export default class FilesPage extends Page {
 
-  onEnter(){
-    // this.emit('files:startPolling')
-  }
-
-  onExit(){
-    // this.emit('files:stopPolling')
+  constructor(){
+    super()
+    this.deleteFiles = this.deleteFiles.bind(this)
   }
 
   onStateChange(state){
@@ -30,21 +28,33 @@ export default class FilesPage extends Page {
 
     fileId = fileId || '0'
 
-    const file = state.files[fileId]
-    if (!file){
-      this.emit({
-        type: 'files:load',
-        fileId: fileId
-      })
-    }else{
-      // console.info('onStateChange', file)
-      if (file.isDirectory && !file.directoryContentsLoaded && !file.loadingDirectoryContents){
-        this.emit({
-          type: 'files:loadDirectoryContents',
-          fileId: fileId
-        })
-      }
-    }
+    this.emit({
+      type: 'files:startPolling',
+      fileId: fileId
+    })
+
+    // const file = state.files[fileId]
+    // if (!file){
+    //   this.emit({
+    //     type: 'files:load',
+    //     fileId: fileId
+    //   })
+    // }else{
+    //   // console.info('onStateChange', file)
+    //   if (file.isDirectory && !file.directoryContentsLoaded && !file.loadingDirectoryContents){
+    //     this.emit({
+    //       type: 'files:loadDirectoryContents',
+    //       fileId: fileId
+    //     })
+    //   }
+    // }
+  }
+
+  deleteFiles(fileIds){
+    this.emit({
+      type: 'files:delete',
+      fileIds,
+    })
   }
 
   render(state) {
@@ -53,9 +63,9 @@ export default class FilesPage extends Page {
     const file = files[fileId]
 
     const content = (
-      file.loading ? 'Loading...' :
+      !file.loaded ? 'Loading...' :
       file.errorMessage ? <h1>Error: {file.errorMessage}</h1> :
-      file.isDirectory ? <DirectoryContents files={files} fileId={fileId} /> :
+      file.isDirectory ? <DirectoryContents files={files} fileId={fileId} deleteFiles={this.deleteFiles} /> :
       file.isVideo ? <VideoFile files={files} fileId={fileId} /> :
       file.isImage ? <img src={file.downloadUrl} /> :
       // file.isText ? <iframe src={file.downloadUrl} /> :
@@ -93,25 +103,66 @@ class Breadcrum extends React.Component {
 
 class DirectoryContents extends React.Component {
   render(){
-    const files = this.props.files
-    const fileId = this.props.fileId
-    const directory = files[fileId]
-    const directoryContents = directory.directoryContentsLoaded ?
-      directory.fileIds.map(fileId => <DirectoryMember key={fileId} file={files[fileId]} />) :
-      'loading...'
-    return <div>
-      <h1>{directory.name}</h1>
-      <div>{directoryContents}</div>
-    </div>
+    const {fileId, beingDeleted, deleteFiles} = this.props
+
+    const allFiles = this.props.files
+    const filesBeingDeleted = allFiles.filesBeingDeleted
+    const directory = allFiles[fileId]
+
+    if (!directory.fileIds){
+      return <div>Loading…</div>
+    }
+
+    const files = directory.fileIds.map(fileId => {
+      const file = allFiles[fileId]
+      const beingDeleted = filesBeingDeleted.includes(fileId)
+      return {
+        key: file.id,
+        file: file,
+        beingDeleted: beingDeleted,
+        selectable: !beingDeleted,
+      }
+    })
+
+    const props = {
+      className: "files-page-directory-contents",
+      members: files,
+      memberComponent: DirectoryMember,
+      actions: [
+        {
+          name: 'delete',
+          onClick: deleteFiles,
+        }
+      ],
+      orderings: ['name', 'createdAt']
+    }
+    return <SelectableList {...props} />
   }
 }
 
-const DirectoryMember = ({file}) => {
+const DirectoryMember = (props) => {
+  const {
+    selected,
+    file,
+    toggleSelected,
+    beingDeleted,
+  } = props
   let className = "files-directory-member"
-  if (file.isDirectory) className += ' directory'
+  if (file.isDirectory) className += ' files-directory-member-directory'
+  if (selected) className += ' files-directory-member-selected'
+  if (beingDeleted) className += ' files-directory-member-being-deleted'
   return <div className={className}>
+    <div>
+      <input
+        type="checkbox"
+        checked={selected}
+        tabIndex="-1"
+        onChange={toggleSelected}
+        disabled={beingDeleted}
+      />
+    </div>
     <DirectoryMemberIcon file={file} />
-    <Link className="files-title" path={`/files/${file.id}`}>{file.name}</Link>
+    <Link tabIndex="-1" className="files-title" path={`/files/${file.id}`}>{file.name}</Link>
     <small>{moment(file.created_at).fromNow().toString()}</small>
     <small>{formatBytes(file.size, 2)}</small>
     <div className="grow"></div>

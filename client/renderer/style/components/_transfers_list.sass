@@ -1,5 +1,5 @@
 .transfers-list
-  > .transfers-list-transfer
+  .transfers-list-transfer
     @extend .columns
     padding: 0.25em 0.5em
     align-items: center
@@ -9,21 +9,21 @@
     border-color: #c8c8c8
     border-width: 1px 0 0 0
 
-    outline: none
-    &:active, &:focus
-      outline: 2px solid $blue
-      background-color: #c1caff
-
     > div:first-child
       margin-right: 0.5em
 
 
-  > .transfers-list-transfer-selected
+  & *:active, & *:focus
+    > .transfers-list-transfer
+      outline: 2px solid $blue
+      background-color: #c1caff
+
+  .transfers-list-transfer-selected
     background-color: $lightblue
     &:active, &:focus
       background-color: #a9b5fd
 
-  > .transfers-list-transfer-being-deleted
+  .transfers-list-transfer-being-deleted
     &, &:active, &:focus
       outline: none
       background-color: inherit

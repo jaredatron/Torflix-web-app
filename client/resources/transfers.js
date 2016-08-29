@@ -17,16 +17,11 @@ export default function(events){
   let pollingStream = null
 
   events.subscribe( event => {
-    if (event.type === 'transfers:load')                   return loadTransfers()
-    if (event.type === 'transfers:reload')                 return reloadTransfers()
-    if (event.type === 'transfers:startPolling')           return startPolling()
-    if (event.type === 'transfers:stopPolling')            return stopPolling()
-    if (event.type === 'transfers:toggleTransferSelect')   return toggleTransferSelect(event)
-    if (event.type === 'transfers:selectAllTransfers')     return selectAllTransfers()
-    if (event.type === 'transfers:emptySelectedTransfers') return emptySelectedTransfers()
-    if (event.type === 'transfers:confirmDeleteSelected')  return confirmDeleteSelected(event)
-    if (event.type === 'transfers:cancelDelete')           return cancelDelete()
-    if (event.type === 'transfers:deleteSelected')         return deleteSelected(event)
+    if (event.type === 'transfers:load')         return loadTransfers()
+    if (event.type === 'transfers:reload')       return reloadTransfers()
+    if (event.type === 'transfers:startPolling') return startPolling()
+    if (event.type === 'transfers:stopPolling')  return stopPolling()
+    if (event.type === 'transfers:delete')       return deleteTransfers(event.transferIds)
   })
 
   const loadTransfers = () => {
