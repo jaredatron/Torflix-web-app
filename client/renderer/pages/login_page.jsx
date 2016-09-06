@@ -15,7 +15,7 @@ export default class LoginPage extends Page {
 
 class LoginButton extends React.Component {
   render(){
-    const href = putio.oauthUrl()
+    const href = putio.oauthUrl().toString()
     return <Link href={href}>{this.props.children}</Link>
   }
 }
